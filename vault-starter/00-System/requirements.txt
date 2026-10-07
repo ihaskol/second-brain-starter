@@ -1,0 +1,22 @@
+# Python packages for the vault's scripts.
+# Install into the vault's own environment (see Integration-Setup-Guides, Guide 11):
+#   python3 -m venv .venv
+#   source .venv/bin/activate
+#   python -m pip install -r 00-System/requirements.txt
+#
+# Runtime: Python 3.11 or newer. (The scripts keep Python 3.8 compatibility
+# code, but 3.8 is not the supported baseline.)
+#
+# External programs, installed separately (macOS: Homebrew):
+#   poppler (pdftotext, pdfinfo)   brew install poppler
+#   ocrmypdf + tesseract           brew install ocrmypdf
+#   tesseract language packs       brew install tesseract-lang
+#   qpdf (split long books)        brew install qpdf
+#   pandoc (Word/PDF output)       brew install pandoc
+#
+# Note: split-pdf.py also needs PyPDF2 (not listed); use split-pdf-qpdf.sh instead.
+
+PyYAML>=6.0       # pipeline configs, validate-text.py, Zotero scripts
+requests          # Zotero scripts
+pypdf             # checked by zotero_doctor.py
+pytesseract       # checked by zotero_doctor.py

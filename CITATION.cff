@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use or adapt this work, please cite it as below."
+title: "The Second Brain: An AI Research System You Can Audit"
+type: generic
+authors:
+  - family-names: Haskologlu
+    given-names: Isa
+date-released: 2026-10-06
+license: CC-BY-4.0
+url: "https://claude.ai/artifact/EMh3hwYGRD6KdTSQFMEPVh"

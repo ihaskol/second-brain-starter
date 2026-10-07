@@ -1,0 +1,43 @@
+# Source Pipeline Configuration
+
+languages:
+  supported:
+    - code: tur
+      name: Turkish
+      tesseract: tur
+    - code: eng
+      name: English
+      tesseract: eng
+    - code: ara
+      name: Arabic
+      tesseract: ara
+
+quality_thresholds:
+  min_chars_per_page: 50
+  max_replacement_chars: 50
+  mojibake_patterns:
+    - "�"
+    - "Ã§"
+    - "Ä±"
+    - "ÅŸ"
+    - "Ã¼"
+    - "Ã¶"
+    - "Ä°"
+    - "Ãœ"
+    - "Ã–"
+
+file_naming:
+  ocr_suffix: "__ocr"
+  text_suffix: "__text"
+  quality_suffix: "__quality"
+  intake_suffix: "__intake"
+  completion_suffix: "__completion"
+
+folder_structure:
+  originals: "01-Library/Originals"
+  ocr: "01-Library/OCR"
+  text: "01-Library/Text"
+  reports: "01-Library/Reports"
+  processed: "01-Library/Processed"
+  placeholders: "01-Library/Placeholders"
+  inbox: "05-Inbox"

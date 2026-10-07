@@ -1,0 +1,170 @@
+# Zotero Integration Configuration
+# Second Brain - Academic Source Management
+
+# Integration mode
+# Options: local-api, better-bibtex, hybrid
+# Phase 1: local-api only
+integration_mode: local-api
+
+# Local API configuration
+local_api:
+  base_url: "http://localhost:23119/api"
+  api_version: 3
+  timeout_seconds: 15
+  library_type: user  # user | group
+  library_id: YOUR_ZOTERO_LIBRARY_ID  # run 00-System/Scripts/zotero_doctor.py to detect it
+
+# Better BibTeX configuration (Phase 2 - not yet implemented)
+better_bibtex:
+  enabled: false
+  auto_export_path: "00-System/Zotero/zotero-library.json"
+  keep_updated: true
+  format: "Better CSL JSON"
+
+# Project mappings
+# Maps Zotero collections and tags to project directories in 03-Projects/
+# Applied AFTER neutral wiki ingestion to preserve source-bounded separation
+project_mappings:
+  collections:
+    "My Collection": "My-Project"
+    # Add more mappings as needed:
+    # "Collection Name": "Project-Directory-Name"
+
+  tags:
+    "project:my-project": "My-Project"
+    # Add more tag mappings as needed:
+    # "tag-name": "Project-Directory-Name"
+
+# Duplicate detection strategy
+# Checks performed in order before import
+duplicate_checks:
+  - sha256_hash              # Identical file already in Originals
+  - zotero_item_key          # Already imported from Zotero
+  - zotero_attachment_key    # Specific PDF already imported
+  - doi                      # Same scholarly work (warn if different hash)
+  - isbn                     # Same book (warn if different hash)
+  - normalized_title_creator_year  # Fuzzy match
+
+# Duplicate check locations
+duplicate_check_paths:
+  - "01-Library/Originals"
+  - "01-Library/Text"
+  - "01-Library/Reports"
+  - "05-Inbox"
+  - "02-Wiki"  # Check for existing source pages
+
+# Import behavior
+import:
+  default_inbox: "05-Inbox"
+  require_explicit_selection: true  # Never auto-import entire library
+  verify_hash_after_copy: true      # Verify SHA-256 post-copy
+  create_provenance_manifest: true  # Always create __zotero.md
+  auto_invoke_process_sources: false  # Manual handoff to /process-sources
+
+  # Attachment handling
+  attachment:
+    prefer_pdf: true
+    require_local_availability: true  # Skip if not synced locally
+    handle_multiple_pdfs: "prompt"    # prompt | first | skip
+
+  # Filename handling
+  filename:
+    format: "{creators} - {year} - {title}.pdf"
+    max_length: 200
+    sanitize_special_chars: true
+    preserve_zotero_filename: false
+
+# Provenance manifest configuration
+provenance:
+  location: "01-Library/Reports"
+  filename_suffix: "__zotero.md"
+  include_full_metadata: true
+  include_abstract: false  # Keep manifests focused
+  include_notes: false     # Don't import Zotero notes (yet)
+  include_tags: true
+  include_collections: true
+
+# Safety rules (ENFORCED - do not modify)
+safety:
+  read_only: true              # Never write to Zotero
+  no_zotero_writes: true       # No item/collection/tag creation
+  no_sqlite_access: true       # Only use HTTP API
+  no_api_keys_in_git: true     # Never commit credentials
+  no_attachment_modifications: true  # Don't rename/move Zotero files
+  require_confirmation_batch: true   # Confirm before batch imports
+
+# Search configuration
+search:
+  default_limit: 50
+  include_attachments_in_results: true
+  show_duplicate_status: true
+  highlight_project_mapped: true
+
+# Collection browsing
+collections:
+  show_subcollections: true
+  show_item_counts: true
+  show_project_mappings: true
+  sort_by: "name"  # name | item_count | recent
+
+# Logging and debugging
+logging:
+  level: "INFO"  # DEBUG | INFO | WARNING | ERROR
+  log_api_requests: false
+  log_duplicate_checks: true
+  log_file: "00-System/Zotero/zotero-integration.log"
+
+# Pipeline integration
+pipeline:
+  handoff_to_process_sources: true
+  use_existing_scripts: true
+  respect_quality_gates: true
+
+  # Stage mapping
+  stages:
+    acquisition: "Zotero import"
+    intake: "inspect-pdf.py"
+    format: "process-source.py"
+    quality: "validate-text.py"
+    ingestion: "/ingest workflow"
+    verification: "manual"
+    project_use: "optional project mapping"
+
+# Supported languages (from source pipeline)
+supported_languages:
+  - eng  # English
+  - tur  # Turkish
+  - ara  # Arabic
+  # Multi-language combinations with explicit approval
+
+# Item type preferences
+# Controls which Zotero item types can be imported
+item_types:
+  allowed:
+    - journalArticle
+    - book
+    - bookSection
+    - conferencePaper
+    - thesis
+    - report
+    - manuscript
+
+  blocked:
+    - webpage  # Prefer archival sources
+    - blogPost
+    - forumPost
+    - email
+
+# Citation key handling (Better BibTeX integration - Phase 2)
+citation_keys:
+  use_better_bibtex: false  # Not installed yet
+  fallback_format: "{author}{year}"
+  preserve_in_manifest: true
+
+# Future enhancements (not yet implemented)
+future:
+  group_libraries: false
+  automatic_updates: false
+  bidirectional_sync: false
+  zotero_note_import: false
+  annotation_import: false

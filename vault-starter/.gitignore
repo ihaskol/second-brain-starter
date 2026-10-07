@@ -1,0 +1,27 @@
+.DS_Store
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.trash/
+.claude/settings.local.json
+
+# Zotero Web API credentials — never commit
+00-System/Config/.zotero-web-api-key
+
+# Source Pipeline — Regenerable Intermediates
+01-Library/OCR/*__ocr.pdf
+
+# Source Pipeline — Temporary Files
+00-System/.source-pipeline-tmp/
+05-Inbox/
+**/__pycache__/
+*.pyc
+*.partial
+*.tmp
+
+# Note: DO NOT ignore the following (provenance records, version these):
+# 01-Library/Reports/*__quality.md
+# 01-Library/Reports/*__intake.md
+# 01-Library/Text/*.txt (user decides whether to stage)
+
+# Python virtual environment (Guide 11)
+.venv/

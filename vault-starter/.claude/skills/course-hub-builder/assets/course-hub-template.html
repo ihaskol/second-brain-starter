@@ -1,0 +1,966 @@
+<!-- TEMPLATE: worked example (GOVT 325, Fall 2026). Replace the COURSE DATA block, instructor details and LINKS (left empty here) before use. -->
+<meta charset="utf-8">
+<title>GOVT 325 Course Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,650&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: a course binder. Sticky header with section tabs; one working column; week pages open as their own view. */
+:root{
+  --bg:#f3f5f4; --paper:#ffffff; --ink:#18222d; --muted:#5b6670; --line:#d6ddda;
+  --accent:#0e6b5a; --accent-soft:#dcefe9; --myth:#a63d32; --myth-soft:#f6e3e0; --gold:#9a6b12; --gold-soft:#f5ead3;
+  --m1:#0e6b5a; --m2:#9a6b12; --m3:#2f5f9e; --m4:#7a4a8c; --node:#ffffff;
+  --c1:#00806a; --c2:#a8720a; --c3:#2f62b0;
+  --f-display:"Newsreader", "Times New Roman", Georgia, serif;
+  --f-body:"Source Sans 3", "Helvetica Neue", Arial, sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --fs:1rem; --lh:1.55; --ls:0;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#11171c; --paper:#182128; --ink:#e7ecea; --muted:#9aa7ad; --line:#2c3a42;
+  --accent:#4fc2a8; --accent-soft:#163a33; --myth:#ef8a7c; --myth-soft:#3a2120; --gold:#e0b25a; --gold-soft:#3a2f17;
+  --m1:#4fc2a8; --m2:#e0b25a; --m3:#7fa8e6; --m4:#c39ad6; --node:#182128; --c1:#2fa88d; --c2:#b88a28; --c3:#5f8fd6; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#11171c; --paper:#182128; --ink:#e7ecea; --muted:#9aa7ad; --line:#2c3a42;
+  --accent:#4fc2a8; --accent-soft:#163a33; --myth:#ef8a7c; --myth-soft:#3a2120; --gold:#e0b25a; --gold-soft:#3a2f17;
+  --m1:#4fc2a8; --m2:#e0b25a; --m3:#7fa8e6; --m4:#c39ad6; --node:#182128; --c1:#2fa88d; --c2:#b88a28; --c3:#5f8fd6; color-scheme:dark}
+:root.readable{--lh:1.8; --ls:.02em}
+:root.readable body{word-spacing:.08em}
+*{box-sizing:border-box}
+html{font-size:calc(16px * var(--scale,1))}
+body{background:var(--bg); color:var(--ink); font-family:var(--f-body); font-size:var(--fs); line-height:var(--lh); letter-spacing:var(--ls); margin:0}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--accent); outline-offset:2px}
+h1,h2,h3{font-family:var(--f-display); font-weight:650; line-height:1.2; text-wrap:balance; margin:0}
+h1{font-size:2rem} h2{font-size:1.5rem} h3{font-size:1.15rem}
+p{margin:0}
+.wrap{max-width:68rem; margin:0 auto; padding-inline:16px}
+header.top{position:sticky; top:env(safe-area-inset-top,0px); z-index:20; background:var(--paper); border-bottom:1px solid var(--line)}
+.topbar{display:flex; align-items:center; gap:12px; padding-block:10px}
+.brand{display:flex; flex-direction:column; min-width:0}
+.brand b{font-family:var(--f-mono); font-size:.75rem; letter-spacing:.08em; color:var(--accent)}
+.brand span{font-family:var(--f-display); font-size:1.1rem; font-weight:650; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.topbar .spacer{flex:1}
+.iconbtn{border:1px solid var(--line); background:var(--paper); color:var(--ink); border-radius:8px; padding:6px 10px; font:inherit; font-size:.9rem; cursor:pointer}
+.iconbtn:hover{border-color:var(--accent)}
+nav.tabs{display:flex; gap:2px; overflow-x:auto; scrollbar-width:thin; padding-bottom:0}
+nav.tabs a{flex:none; text-decoration:none; color:var(--muted); font-weight:600; font-size:.95rem; padding:8px 12px; border-bottom:3px solid transparent}
+nav.tabs a[aria-current="page"]{color:var(--ink); border-bottom-color:var(--accent)}
+nav.tabs a:hover{color:var(--ink)}
+main{padding-block:24px 64px}
+section.view{display:flex; flex-direction:column; gap:24px}
+.lede{color:var(--muted); max-width:44rem; font-size:1.05rem}
+.eyebrow{font-family:var(--f-mono); font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)}
+.panel{background:var(--paper); border:1px solid var(--line); border-radius:10px; padding:18px}
+.grid{display:grid; gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(18rem,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(15rem,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(12rem,1fr))}
+.grid > *{min-width:0}
+.stack{display:flex; flex-direction:column; gap:10px}
+.row{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
+.chip{display:inline-flex; align-items:center; gap:6px; font-size:.78rem; font-weight:600; padding:2px 9px; border-radius:999px; border:1px solid var(--line); color:var(--muted); background:var(--paper); white-space:nowrap}
+.chip.m1{color:var(--m1); border-color:var(--m1)} .chip.m2{color:var(--m2); border-color:var(--m2)}
+.chip.m3{color:var(--m3); border-color:var(--m3)} .chip.m4{color:var(--m4); border-color:var(--m4)}
+.chip.done{background:var(--accent-soft); color:var(--accent); border-color:transparent}
+.chip.next{background:var(--gold-soft); color:var(--gold); border-color:transparent}
+.chip.up{color:var(--muted)}
+.chip.warn{background:var(--myth-soft); color:var(--myth); border-color:transparent}
+.btn{display:inline-flex; align-items:center; gap:6px; border:1px solid var(--accent); background:var(--accent); color:var(--paper); font:inherit; font-weight:600; font-size:.92rem; padding:7px 14px; border-radius:8px; cursor:pointer; text-decoration:none}
+.btn.ghost{background:transparent; color:var(--accent)}
+.btn[disabled]{opacity:.45; cursor:not-allowed}
+.muted{color:var(--muted)}
+.small{font-size:.88rem}
+.mono{font-family:var(--f-mono); font-size:.8rem}
+.num{font-variant-numeric:tabular-nums}
+hr.rule{border:0; border-top:1px solid var(--line); margin:0}
+
+/* Home */
+.hero{display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); gap:18px}
+@media (max-width:760px){.hero{grid-template-columns:1fr}}
+.nextcard{border-left:5px solid var(--gold)}
+.nextcard h2{font-size:1.6rem}
+.countdowns{display:grid; grid-template-columns:repeat(auto-fit,minmax(9rem,1fr)); gap:10px}
+.cd{border:1px solid var(--line); border-radius:8px; padding:10px 12px; background:var(--paper)}
+.cd .n{font-family:var(--f-display); font-size:1.7rem; font-weight:650; font-variant-numeric:tabular-nums}
+.cd .l{font-size:.82rem; color:var(--muted)}
+.arc{display:flex; gap:3px; align-items:stretch}
+.arc .seg{flex:1; height:10px; border-radius:3px; background:var(--line)}
+.arc .seg.done{background:var(--accent)} .arc .seg.next{background:var(--gold)}
+.persona{display:flex; flex-direction:column; gap:6px; text-align:left; border:1px solid var(--line); background:var(--paper); color:var(--ink); border-radius:10px; padding:14px; font:inherit; cursor:pointer}
+.persona:hover{border-color:var(--accent)}
+.persona[aria-pressed="true"]{border-color:var(--accent); box-shadow:inset 0 0 0 1px var(--accent)}
+.persona b{font-family:var(--f-display); font-size:1.08rem}
+.persona span{font-size:.88rem; color:var(--muted)}
+.path{background:var(--accent-soft); border-radius:10px; padding:16px}
+.path ol{margin:8px 0 0; padding-left:1.3rem; display:flex; flex-direction:column; gap:6px}
+
+/* Map */
+.mapwrap{overflow-x:auto; border:1px solid var(--line); border-radius:10px; background:var(--paper)}
+.mapwrap svg{display:block; width:100%; min-width:640px; height:auto}
+.mapwrap text{fill:var(--ink); font-family:var(--f-body)}
+.node{cursor:pointer}
+.node rect{fill:var(--node); stroke-width:1.5}
+.node:hover rect,.node:focus rect{stroke-width:3}
+.node.dim{opacity:.22}
+.edge{stroke:var(--line); stroke-width:1.5; fill:none}
+.thread-line{fill:none; stroke-width:3; stroke-dasharray:6 5; opacity:.9}
+.threads{display:flex; flex-wrap:wrap; gap:8px}
+.threadbtn{border:1px solid var(--line); background:var(--paper); color:var(--ink); border-radius:999px; padding:5px 12px; font:inherit; font-size:.88rem; cursor:pointer}
+.threadbtn[aria-pressed="true"]{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+.timeline{display:flex; flex-direction:column; gap:0}
+.tl{display:grid; grid-template-columns:6.5rem 1fr; gap:12px; padding:10px 0; border-bottom:1px solid var(--line)}
+.tl:last-child{border-bottom:0}
+.tl .d{font-family:var(--f-mono); font-size:.8rem; color:var(--muted); padding-top:2px}
+.tl a{font-weight:600; text-decoration:none}
+.tl.special .t{color:var(--muted)}
+
+/* Week cards & detail */
+.weekcard{display:flex; flex-direction:column; gap:8px; text-decoration:none; color:var(--ink); background:var(--paper); border:1px solid var(--line); border-radius:10px; padding:14px; border-top:4px solid var(--line)}
+.weekcard.m1{border-top-color:var(--m1)} .weekcard.m2{border-top-color:var(--m2)} .weekcard.m3{border-top-color:var(--m3)} .weekcard.m4{border-top-color:var(--m4)}
+.weekcard:hover{border-color:var(--accent)}
+.weekcard h3{font-size:1.05rem}
+.weekhead{display:flex; flex-direction:column; gap:10px}
+.question{font-family:var(--f-display); font-size:1.3rem; font-style:italic; color:var(--ink); border-left:3px solid var(--accent); padding-left:14px; max-width:46rem}
+.reading{display:grid; grid-template-columns:minmax(0,1fr); gap:6px; padding:14px 0; border-bottom:1px solid var(--line)}
+.reading:last-child{border-bottom:0}
+.reading .cite{font-weight:600}
+.reading .find{max-width:48rem}
+.reading .meta{display:flex; flex-wrap:wrap; gap:6px}
+.twocol{display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); gap:18px; align-items:start}
+@media (max-width:860px){.twocol{grid-template-columns:1fr}}
+.slidelist{display:flex; flex-direction:column; gap:8px}
+.slidebtn{display:flex; justify-content:space-between; align-items:center; gap:10px; text-align:left; width:100%; border:1px solid var(--line); background:var(--paper); color:var(--ink); border-radius:8px; padding:10px 12px; font:inherit; cursor:pointer}
+.slidebtn:hover:not([disabled]){border-color:var(--accent)}
+.slidebtn[disabled]{cursor:default; color:var(--muted); border-style:dashed}
+.ws{border:1px solid var(--line); border-radius:10px; padding:14px; display:flex; flex-direction:column; gap:8px; background:var(--paper)}
+.ws h3{font-size:1.05rem}
+.qlist{margin:0; padding-left:1.2rem; display:flex; flex-direction:column; gap:6px}
+details.box{border:1px solid var(--line); border-radius:10px; background:var(--paper); padding:0}
+details.box > summary{cursor:pointer; padding:12px 16px; font-weight:600; list-style:none; display:flex; justify-content:space-between; gap:8px}
+details.box > summary::-webkit-details-marker{display:none}
+details.box > summary::after{content:"+"; font-family:var(--f-mono); color:var(--muted)}
+details.box[open] > summary::after{content:"−"}
+details.box > div{padding:0 16px 16px}
+.check{display:flex; gap:8px; align-items:center; font-weight:600; cursor:pointer}
+.check input{width:1.15rem; height:1.15rem; accent-color:var(--accent)}
+.note{background:var(--gold-soft); color:var(--ink); border-radius:8px; padding:10px 12px; font-size:.92rem}
+.note.red{background:var(--myth-soft)}
+
+/* Viewer */
+dialog.viewer{border:0; padding:0; width:min(64rem,96vw); max-height:94vh; border-radius:12px; background:var(--paper); color:var(--ink)}
+dialog.viewer::backdrop{background:rgb(10 15 20 / .65)}
+.vbar{display:flex; flex-wrap:wrap; gap:8px; align-items:center; padding:10px 12px; border-bottom:1px solid var(--line)}
+.vbar .t{flex:1; min-width:10rem; font-weight:600}
+.vstage{overflow:auto; max-height:calc(94vh - 60px); background:var(--bg); display:flex; justify-content:center; padding:12px}
+.vstage canvas{max-width:100%; height:auto; background:#fff; box-shadow:0 1px 6px rgb(0 0 0 / .2)}
+.vmsg{padding:24px; color:var(--muted)}
+
+/* Exam prep */
+.subtabs{display:flex; flex-wrap:wrap; gap:6px}
+.subtabs button{border:1px solid var(--line); background:var(--paper); color:var(--ink); border-radius:8px; padding:6px 12px; font:inherit; font-size:.92rem; cursor:pointer}
+.subtabs button[aria-selected="true"]{background:var(--accent); color:var(--paper); border-color:var(--accent)}
+.flash{min-height:12rem; display:flex; flex-direction:column; justify-content:center; gap:10px; text-align:center; border:1px solid var(--line); border-radius:12px; background:var(--paper); padding:24px; cursor:pointer}
+.flash .term{font-family:var(--f-display); font-size:1.6rem; font-weight:650}
+.flash .def{max-width:40rem; margin:0 auto}
+.opt{display:block; width:100%; text-align:left; border:1px solid var(--line); background:var(--paper); color:var(--ink); border-radius:8px; padding:9px 12px; font:inherit; cursor:pointer; margin-top:6px}
+.opt:hover:not([disabled]){border-color:var(--accent)}
+.opt.right{border-color:var(--accent); background:var(--accent-soft)}
+.opt.wrong{border-color:var(--myth); background:var(--myth-soft)}
+.feedback{font-size:.92rem; margin-top:8px}
+.mistake{display:flex; flex-direction:column; gap:8px; border:1px solid var(--line); border-radius:10px; padding:14px; background:var(--paper)}
+.mistake .claim{font-family:var(--f-display); font-size:1.08rem}
+.verdict{font-weight:700}
+.verdict.r{color:var(--accent)} .verdict.w{color:var(--myth)}
+table.t{border-collapse:collapse; width:100%; font-size:.92rem}
+table.t th,table.t td{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top}
+table.t th{font-size:.78rem; text-transform:uppercase; letter-spacing:.06em; color:var(--muted)}
+.tablewrap{overflow-x:auto}
+input[type="number"],input[type="date"],input[type="search"],select{font:inherit; color:var(--ink); background:var(--paper); border:1px solid var(--line); border-radius:6px; padding:6px 8px}
+input[type="number"]{width:5.5rem}
+label.f{display:flex; flex-direction:column; gap:4px; font-size:.9rem; font-weight:600}
+.big{font-family:var(--f-display); font-size:2.2rem; font-weight:650; font-variant-numeric:tabular-nums}
+.settings{display:grid; grid-template-columns:repeat(auto-fit,minmax(13rem,1fr)); gap:12px}
+.seg-ctl{display:flex; gap:4px; flex-wrap:wrap}
+.seg-ctl button{border:1px solid var(--line); background:var(--paper); color:var(--ink); border-radius:6px; padding:5px 10px; font:inherit; font-size:.9rem; cursor:pointer}
+.seg-ctl button[aria-pressed="true"]{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+/* Figures: thin horizontal bars, baseline-anchored, direct labels in ink */
+.fig{display:flex; flex-direction:column; gap:10px}
+.fig .ft{font-weight:600}
+.legend{display:flex; flex-wrap:wrap; gap:12px; font-size:.82rem; color:var(--muted)}
+.legend i{display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:5px; vertical-align:-1px}
+.brow{display:grid; grid-template-columns:minmax(6rem,11rem) minmax(0,1fr); gap:10px; align-items:center}
+.brow .bl{font-size:.86rem}
+.bars{display:flex; flex-direction:column; gap:2px}
+.btrack{display:grid; grid-template-columns:minmax(0,1fr) 3rem; align-items:center; gap:6px; min-height:14px}
+.bwrap{min-width:0}
+.bar{height:12px; border-radius:0 4px 4px 0; min-width:2px}
+.bv{font-size:.8rem; font-variant-numeric:tabular-nums; color:var(--ink)}
+.stackbar{display:flex; gap:2px; height:16px}
+.stackbar span{display:block; height:100%}
+.stackbar span:first-child{border-radius:3px 0 0 3px} .stackbar span:last-child{border-radius:0 4px 4px 0}
+.dists{display:flex; gap:2px; align-items:flex-end; height:70px; border-bottom:1px solid var(--line)}
+.dists span{flex:1; border-radius:4px 4px 0 0; position:relative}
+.dists em{position:absolute; top:-1.2rem; left:0; right:0; text-align:center; font-style:normal; font-size:.75rem; color:var(--ink); font-variant-numeric:tabular-nums}
+.src{font-size:.78rem; color:var(--muted)}
+.news{display:flex; flex-direction:column; gap:6px; padding:12px 0; border-bottom:1px solid var(--line)}
+.news:last-child{border-bottom:0}
+.news .h{font-family:var(--f-display); font-size:1.05rem; font-weight:650}
+.news .c{font-size:.9rem; border-left:3px solid var(--accent); padding-left:10px}
+footer.foot{border-top:1px solid var(--line); padding-block:18px; color:var(--muted); font-size:.85rem}
+@media (prefers-reduced-motion: reduce){*{transition:none!important; animation:none!important}}
+:root.calm *{transition:none!important; animation:none!important}
+@media (max-width:520px){h1{font-size:1.6rem} .question{font-size:1.12rem} .tl{grid-template-columns:5.2rem 1fr}}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand"><b>GOVT 325 · FALL 2026</b><span>Minority Politics in the United States</span></div>
+      <div class="spacer"></div>
+      <button class="iconbtn" id="settingsBtn" type="button" aria-controls="settingsPanel" aria-expanded="false">Display</button>
+    </div>
+    <div class="panel" id="settingsPanel" hidden style="margin-bottom:10px">
+      <div class="settings">
+        <div class="stack"><span class="eyebrow">Theme</span><div class="seg-ctl" data-set="theme"><button type="button" data-v="system">System</button><button type="button" data-v="light">Light</button><button type="button" data-v="dark">Dark</button></div></div>
+        <div class="stack"><span class="eyebrow">Text size</span><div class="seg-ctl" data-set="scale"><button type="button" data-v="1">Standard</button><button type="button" data-v="1.15">Large</button><button type="button" data-v="1.3">Larger</button></div></div>
+        <div class="stack"><span class="eyebrow">Reading comfort</span><div class="seg-ctl" data-set="readable"><button type="button" data-v="0">Default</button><button type="button" data-v="1">Wider spacing</button></div></div>
+        <div class="stack"><span class="eyebrow">Motion</span><div class="seg-ctl" data-set="calm"><button type="button" data-v="0">Default</button><button type="button" data-v="1">Reduce</button></div></div>
+      </div>
+      <p class="small muted" style="margin-top:10px">These settings and your progress checkmarks are saved only in this browser. Nothing is sent to your instructor.</p>
+    </div>
+    <nav class="tabs" aria-label="Course sections">
+      <a href="#home">Start</a><a href="#map">Course map</a><a href="#weeks">Weeks</a><a href="#workshops">Workshops</a><a href="#exam">Exam prep</a><a href="#methods">Methods toolbox</a><a href="#assignments">Assignments</a><a href="#support">Support</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="main" tabindex="-1"></main>
+
+<footer class="foot wrap">
+  <p>GOVT 325.001 · American University, School of Public Affairs · Instructor Name · Mondays 5:30–8:30 pm, Building Room. Canvas announcements are the official record for dates and changes. Reading findings come from the page-verified Fall 2026 slide revisions; page numbers are given where the slides give them.</p>
+</footer>
+
+<dialog class="viewer" id="viewer" aria-label="Slide viewer">
+  <div class="vbar">
+    <span class="t" id="vTitle">Slides</span>
+    <button class="iconbtn" type="button" id="vPrev" aria-label="Previous slide">‹ Prev</button>
+    <span class="mono num" id="vPage">–</span>
+    <button class="iconbtn" type="button" id="vNext" aria-label="Next slide">Next ›</button>
+    <a class="iconbtn" id="vOpen" href="#" target="_blank" rel="noopener" style="text-decoration:none">Open PDF</a>
+    <button class="iconbtn" type="button" id="vClose">Close</button>
+  </div>
+  <div class="vstage" id="vStage"><p class="vmsg">Loading…</p></div>
+</dialog>
+
+<script>
+/* ===================== COURSE DATA (edit here) ===================== */
+const LINKS = {
+  midterm: "",
+  W01:"", W03:"",
+  W05:"", W06:"",
+  W08:"", W09:"",
+  W11:"", W12:"",
+  W14:"", W15:"",
+  W17:"", W18:""
+};
+/* PDFs published next to this page. Add a filename here once its PDF is in pdfs/. */
+const PDF_READY = new Set([
+  "GOVT325_Week01_Article-Analysis.pdf","GOVT325_Week01_Lecture_What-is-Minority-Politics.pdf",
+  "GOVT325_Week03_Article-Analysis.pdf","GOVT325_Week03_Lecture_Linked-Fate-Group-Consciousness-Identity.pdf",
+  "GOVT325_Week04_Article-Analysis.pdf","GOVT325_Week04_Lecture_Attitudes-Toward-Minorities.pdf",
+  "GOVT325_Week05_Article-Analysis.pdf","GOVT325_Week05_Lecture_Voting-Rights-and-Election-Administration.pdf",
+  "GOVT325_Week06_Article-Analysis.pdf","GOVT325_Week06_Lecture_Redistricting-and-Representation.pdf",
+  "GOVT325_Week16_Article-Analysis.pdf","GOVT325_Week16_Lecture_Government-and-Public-Administration.pdf"
+]);
+const MODULES = {
+  m1:{name:"Module 1 · Foundations", short:"Foundations", blurb:"The field and its core concepts: identity, linked fate, group consciousness, threat."},
+  m2:{name:"Module 2 · Structural Barriers", short:"Structural barriers", blurb:"Institutions and administration, not just attitudes: discretion, burden, redistricting."},
+  m3:{name:"Module 3 · Group-Specific Politics & 2024", short:"Groups & 2024", blurb:"African American, Latinx, Asian American and Indigenous politics, plus the 2024 election."},
+  m4:{name:"Module 4 · Cross-Cutting Synthesis", short:"Synthesis", blurb:"Intersectionality, religious minorities and coalition-building across every group."}
+};
+const THREADS = [
+  {id:"t1", name:"Groups are internally diverse", text:"Race or ethnicity rarely predicts ideology, turnout or policy views on its own.", weeks:["w03","w08","w09","w11","w17","w14","w15"], color:"--m3"},
+  {id:"t2", name:"Institutions matter alongside attitudes", text:"Rules, jurisdiction, burden and discretion can produce inequality without open discrimination.", weeks:["w05","w06","w08","w12"], color:"--m2"},
+  {id:"t3", name:"Representation helps but is not enough", text:"Effects depend on authority, institutional design and community context.", weeks:["w05","w06","w14"], color:"--m1"},
+  {id:"t4", name:"Inclusion as a public-service skill", text:"Accurate data, real consultation, accessible procedures, attention to disparate burdens.", weeks:["w05","w12","w14"], color:"--m4"},
+  {id:"t5", name:"Coalitions are built, not given", text:"Shared experience can foster solidarity; differences in history and power remain.", weeks:["w03","w08","w18"], color:"--gold"},
+  {id:"t6", name:"Concept vs. measure vs. claim", text:"What a measure captures, and what a design can and cannot prove.", weeks:["w01","w03","w09","w11","w15","w17"], color:"--myth"}
+];
+/* d = class date (Monday). Statuses are computed from today's date. */
+const WEEKS = [
+ {id:"w01", n:"Week 1", d:"2026-08-31", mod:"m1", title:"What Is Minority Politics, and How Should Political Science Study It?",
+  q:"Is race a special topic in American politics, or built into its institutions — and how do we measure attitudes about it?",
+  goal:"Understand that minority politics is central to American political development, and that measuring attitudes requires theoretical precision.",
+  readings:[
+   {role:"Essential", cite:"McClain, P. D. (2021). Crises, race, acknowledgement. Perspectives on Politics, 19(1), 7–18.", design:"Essay (APSA presidential address)", find:"Minorities are scapegoated in national crises, and the discipline's founding helps explain its long neglect of race, ethnicity and politics; it closes with an agenda for change (p. 15)."},
+   {role:"Companion", cite:"DeSante, C. D., & Smith, C. W. (2020). Fear, institutionalized racism, and empathy. PS: Political Science & Politics, 53(4), 639–645.", design:"Measurement study (factor analysis + validation)", find:"Whites' racial attitudes have two higher-order dimensions, cognitive and affective, captured by the four-item FIRE battery. With FIRE in the 2016 Trump-vote model, racial resentment's effect drops by more than half."}
+  ],
+  ws:"W01", wsTitle:"Racial Attitudes Measurement Exercise", wsSub:"Diagnose twelve survey items, then rewrite the worst ones so they measure one thing clearly.", skill:"Measurement and validity",
+  slides:[["Lecture","GOVT325_Week01_Lecture_What-is-Minority-Politics.pdf"],["Article analysis","GOVT325_Week01_Article-Analysis.pdf"]],
+  practice:["What two 2020 crises open McClain's address, and what do they have in common?","How many dimensions underlie whites' racial attitudes in DeSante & Smith, and what are they?","Why should the four FIRE items not be summed into one scale?"],
+  content:"Historical racial violence and scapegoating."},
+ {id:"w03", n:"Weeks 3 & 4", d:"2026-09-14", mod:"m1", title:"Linked Fate, Group Consciousness, and Attitudes Toward Minority Groups",
+  q:"Does the standard linked-fate question measure the theory it was built for, and why do people hold the attitudes they do toward minority groups?",
+  goal:"Distinguish concepts from survey operationalizations; see that attitudes toward minority groups have several causes and compare explanations systematically.",
+  readings:[
+   {role:"Essential · Part A", cite:"Gay, C., Hochschild, J., & White, A. (2016). Americans' belief in linked fate. Journal of Race, Ethnicity, and Politics, 1(1), 117–144.", design:"Survey experiment + surveys", find:"Agreement with the linked-fate item is common across groups (Black 77%, White 73%, Asian 67%, Hispanic 45%; p. 127) and is rarely tied to political outcomes (9 of 96 associations; p. 132). The measure and the theory are poorly aligned."},
+   {role:"Essential · Part B", cite:"Hainmueller, J., & Hopkins, D. J. (2014). Public attitudes toward immigration. Annual Review of Political Science, 17, 225–249.", design:"Narrative literature review (~100 studies)", find:"Little support for personal economic self-interest, a 'zombie theory'; sociotropic, mostly cultural concerns dominate."},
+   {role:"Optional", cite:"Sanchez, G. R. (2006). The role of group consciousness in Latino public opinion. Political Research Quarterly, 59(3), 435–446.", design:"Survey + regression", find:"Perceived discrimination shapes opinion on Latino-salient issues only."},
+   {role:"Optional", cite:"Thompson, A. I. (2025). Asian American racial threat and support for racially discriminatory policy. Political Science Research and Methods, 13, 114–131.", design:"Two survey experiments", find:"A threat cue lowered whites' perceived discrimination against Asian Americans while raising support for discriminatory policies."}
+  ],
+  ws:"W03", wsTitle:"Concept Mapping: Identity, Linked Fate, Group Consciousness", wsSub:"Arrange six related concepts, connect them with labeled arrows, and stress-test the map against evidence.", skill:"Concept vs. operationalization",
+  slides:[["Lecture A · Linked fate","GOVT325_Week03_Lecture_Linked-Fate-Group-Consciousness-Identity.pdf"],["Article analysis A","GOVT325_Week03_Article-Analysis.pdf"],["Lecture B · Attitudes","GOVT325_Week04_Lecture_Attitudes-Toward-Minorities.pdf"],["Article analysis B","GOVT325_Week04_Article-Analysis.pdf"]],
+  practice:["Name two findings that challenge the idea that linked fate is distinctively Black.","Why do H&H call labor-market competition a 'zombie theory'?","Is linked fate the same as group consciousness? Defend your answer."],
+  content:""},
+ {id:"w05", n:"Weeks 5 & 16", d:"2026-09-21", mod:"m2", title:"Structural Barriers: Bureaucratic Discretion and Administrative Burden",
+  q:"How can race-neutral rules and ordinary officials produce racially unequal access to rights and services?",
+  goal:"Understand that race-neutral procedures can have racially disparate effects, and that street-level bureaucrats shape democratic access.",
+  readings:[
+   {role:"Essential", cite:"White, A. R., Nathan, N. L., & Faller, J. K. (2015). What do I need to vote? American Political Science Review, 109(1), 129–142.", design:"Randomized field experiment", find:"Emails from Latino-named senders were about 3.5–4 points less likely to get a reply from local election officials and got less accurate answers. No bias appeared in VRA Section 5 jurisdictions, and there was no partisan difference."},
+   {role:"Essential", cite:"Ray, V., Herd, P., & Moynihan, D. (2023). Racialized burdens. Journal of Public Administration Research and Theory, 33(1), 139–152.", design:"Conceptual theory-building", find:"Learning, compliance and psychological costs can reproduce racial inequality through facially neutral rules."},
+   {role:"Companion", cite:"Park, J., & Favero, N. (2023). Race, locality, and representative bureaucracy. Journal of Public Administration Research and Theory, 33(4), 661–674.", design:"Observational, large-N (public schools)", find:"More county anti-Black bias goes with fewer Black students in gifted programs and more suspensions, and it limits the benefit of Black teachers."},
+   {role:"Optional", cite:"Bentele, K. G., & O'Brien, E. E. (2013). Jim Crow 2.0? Perspectives on Politics, 11(4), 1088–1116.", design:"State-year regression models", find:"Passage of restrictive voter-access laws is tied to Republican control and racial composition."}
+  ],
+  ws:"W05", wsTitle:"Administrative Burden Audit", wsSub:"Read a real government document as a real person would. Log every learning, compliance, and psychological cost, then fix one.", skill:"Policy audit",
+  slides:[["Lecture A · Voting & election administration","GOVT325_Week05_Lecture_Voting-Rights-and-Election-Administration.pdf"],["Article analysis A","GOVT325_Week05_Article-Analysis.pdf"],["Lecture B · Government & public administration","GOVT325_Week16_Lecture_Government-and-Public-Administration.pdf"],["Article analysis B","GOVT325_Week16_Article-Analysis.pdf"]],
+  practice:["Describe White et al.'s experimental design. What was randomized?","Define learning, compliance, and psychological costs with one example each.","What is a 'critical mass' of representation, and what did Park & Favero estimate?"],
+  content:""},
+ {id:"w06", n:"Week 6", d:"2026-09-28", mod:"m2", title:"Structural Barriers II: Redistricting and Representation",
+  q:"Do majority-minority districts maximize minority representation — and which kind of representation do we mean?",
+  goal:"Understand trade-offs between descriptive and substantive representation and practice normative reasoning about electoral institutions.",
+  readings:[
+   {role:"Essential", cite:"Cameron, C., Epstein, D., & O'Halloran, S. (1996). Do majority-minority districts maximize substantive Black representation in Congress? American Political Science Review, 90(4), 794–812.", design:"Estimation + simulation", find:"There is a descriptive–substantive trade-off. In the South, about 47% Black-VAP districts maximize civil-rights votes; elsewhere, spreading Black voters evenly does. They call the courts' 65% rule too stringent (pp. 804, 808–809)."},
+   {role:"Essential", cite:"Lublin, D. (1999). Racial redistricting and African-American representation: A critique. American Political Science Review, 93(1), 183–186.", design:"Published critique", find:"Racial redistricting remains vital for electing Black members. Seven of the eight Black winners from 30–50% Black-VAP districts in 1992 had Black-plus-Latino majorities of 55% or more (p. 183)."},
+   {role:"Current extension", cite:"Schmitt, S. N. (2026). Beyond turnout. Journal of Race, Ethnicity, and Politics.", design:"Synthetic difference-in-differences", find:"After Shelby County v. Holder, formerly covered counties had about half an official fewer Latino elected officials (≈ −7%; p. 9)."}
+  ],
+  ws:"W06", wsTitle:"Redistricting Simulator", wsSub:"Draw districts for the fictional State of Meridian, check the rules live, and compare maps on seats, fairness and representation.", skill:"Normative trade-offs",
+  slides:[["Lecture","GOVT325_Week06_Lecture_Redistricting-and-Representation.pdf"],["Article analysis","GOVT325_Week06_Article-Analysis.pdf"]],
+  practice:["Explain CEO's two equations and why 'electoral effects dominate representation effects'.","State two of Lublin's objections and classify each (data, specification, design, or objective).","Why does Schmitt measure a count of officials rather than turnout?"],
+  content:""},
+ {id:"oct5", special:true, n:"Oct 5", d:"2026-10-05", mod:"m2", title:"Session details on Canvas", note:"The syllabus listed the midterm on this date; it moved to Oct 12."},
+ {id:"mid", special:true, exam:true, n:"Midterm", d:"2026-10-12", mod:"m2", title:"Midterm exam (Weeks 1–6)", note:"40 multiple choice + 4 analytical questions. Time and room: see the Canvas announcement."},
+ {id:"w08", n:"Week 8", d:"2026-10-12", mod:"m3", after:"Taught on Oct 12, after the midterm.", title:"African American Politics: Solidarity, Parties, and Intersectional Agency",
+  q:"What sustains Black political cohesion, who turns out and why, and what does the carceral state do to political voice?",
+  goal:"Understand group solidarity as constructed and maintained through social pressure; recognize that intersectionality shapes political behavior.",
+  readings:[
+   {role:"Essential", cite:"White, I. K., Laird, C. N., & Allen, T. D. (2014). Selling out? American Political Science Review, 108(4), 783–800.", design:"Three randomized experiments", find:"A payment to defect cut student giving to the Obama campaign; publicity, or a watching Black peer, restored it. Racialized social pressure sustains group norms."},
+   {role:"Companion", cite:"Slaughter, C., Crowder, C., & Greer, C. (2024). Black women: Keepers of democracy. Politics & Gender, 20(1), 162–181.", design:"Observational survey (2016 CMPS)", find:"Civic duty predicts Black women's 2016 turnout (+10 points, p. 175). It is only marginal for Black men and not significant for white women."},
+   {role:"Additional", cite:"Weaver, V. M., & Lerman, A. E. (2010). Political consequences of the carceral state. American Political Science Review, 104(4), 817–833.", design:"Two panel surveys + matching", find:"Each deeper level of criminal-justice contact carries a larger civic penalty — lower voting and trust — beyond pre-existing differences."}
+  ],
+  ws:"W08", wsTitle:"Black Women, Black Men, White Women", wsSub:"Group patterns vs. claims about individuals, using only the evidence cards.", skill:"Avoiding over-generalization",
+  slides:[["Lecture","GOVT325_Week08_Lecture_African-American-Politics.pdf"],["Article analysis","GOVT325_Week08_Article-Analysis.pdf"]],
+  practice:["What is the dependent variable in White, Laird & Allen, and why does that limit claims about voting?","Why is the Slaughter et al. civic-duty finding 'intersectional in the strict sense'?","Describe two of Weaver & Lerman's strategies for ruling out selection."],
+  content:"Incarceration and policing."},
+ {id:"w09", n:"Week 9", d:"2026-10-19", mod:"m3", title:"Latinx Politics: Pan-Ethnicity, Mobilization, and National Origin",
+  q:"When do identity appeals mobilize Latino voters, and what does the label 'the Latino vote' hide?",
+  goal:"Understand 'Latino' as a pan-ethnic category with meaningful internal variation, and why data disaggregation matters.",
+  readings:[
+   {role:"Essential", cite:"Valenzuela, A. A., & Michelson, M. R. (2016). Turnout, status, and identity. American Political Science Review, 110(4), 615–630.", design:"Placebo-controlled field experiments", find:"Ethnic appeals raised validated turnout in 9 of 12 subgroups, national appeals in only 4: appeals work where the targeted identity is strong (p. 623)."},
+   {role:"Companion", cite:"Bromo, F., González, L. P., Muñoz, M., & Pathakis, K. M. (2025). Many of us are not like the others. Journal of Race, Ethnicity, and Politics.", design:"Genetic matching (CMPS 2008–2020)", find:"Country of origin predicts party and vote. Cuban-origin Latinos are about 15 points more Republican in presidential vote than matched other Latinos. The data end in 2020."}
+  ],
+  ws:"W09", wsTitle:"One Number, Many Stories: 'The Latino Vote'", wsSub:"Same data, responsible and misleading headlines. The proposition and vote numbers are fictional; population shares are real.", skill:"Aggregation vs. disaggregation",
+  slides:[["Lecture","GOVT325_Week09_Lecture_Latinx-Politics.pdf"],["Article analysis","GOVT325_Week09_Article-Analysis.pdf"]],
+  practice:["Why did Valenzuela & Michelson use a placebo script instead of an uncontacted control group?","What does genetic matching do, and what can't it rule out?","Do the two readings contradict each other? Use the difference between turnout and vote choice."],
+  content:""},
+ {id:"w11", n:"Week 11", d:"2026-10-26", mod:"m3", title:"Asian American Politics: Racial Triangulation and Political Power",
+  q:"How can praise and exclusion work together, and how do Asian Americans respond politically?",
+  goal:"Understand the combination of valorization and exclusion Asian Americans face, and learn content analysis as a method.",
+  readings:[
+   {role:"Essential", cite:"Kim, C. J. (1999). The racial triangulation of Asian Americans. Politics & Society, 27(1), 105–138.", design:"Theory-building (historical discourse)", find:"Asian Americans are positioned on two axes: relatively valorized compared with Black Americans and civically ostracized compared with white Americans (p. 107)."},
+   {role:"Companion", cite:"Chan, N. K. M., Kim, J. Y., & Leung, V. (2021). COVID-19 and Asian Americans. Perspectives on Politics, 20(2), 618–634.", design:"Tweets + before/after survey comparison", find:"After the March 2020 'Chinese virus' framing, Asian Americans' Democratic favorability rose by about 6 points, more than for Whites or Latinos; the party-ID change was not significant."}
+  ],
+  ws:"W11", wsTitle:"Coding Campaign Statements for Racial Framing", wsSub:"Content analysis with two independent coders, then racial triangulation. All ten statements are fictional.", skill:"Content analysis & reliability",
+  slides:[["Lecture","GOVT325_Week11_Lecture_Asian-American-Politics.pdf"],["Article analysis","GOVT325_Week11_Article-Analysis.pdf"]],
+  practice:["What are Kim's two axes, and what two processes place Asian Americans on them?","What exactly is the 'treatment' in Chan, Kim & Leung's survey analysis, and why isn't it randomized?","Does Trump's higher 2024 Asian American vote share contradict Chan et al.?"],
+  content:"Anti-Asian rhetoric during COVID-19."},
+ {id:"w17", n:"Week 17", d:"2026-11-02", mod:"m3", title:"The 2024 Election: Change, Turnout, and Minority Political Heterogeneity",
+  q:"Did minority voters switch parties in 2024, or did different people turn out?",
+  goal:"Understand the 2024 election through validated-voter data, not just exit polls; recognize that minority voters are heterogeneous.",
+  readings:[
+   {role:"Essential", cite:"Pew Research Center. (2025, June 26). Behind Trump's 2024 victory, a more racially and ethnically diverse voter coalition.", design:"Validated-voter panel (descriptive)", find:"Shifts were 'largely the result of differences in which voters turned out' (p. 8). Of Biden's 2020 voters, 15% stayed home and 6% switched (p. 10)."},
+   {role:"Companion", cite:"Sediqe, N. A. (2025). Uncommitted. PS: Political Science & Politics, 58(2), 280–285.", design:"Research note (illustrative case)", find:"Forecasts should include geographically concentrated minority groups: Michigan had 242,000 registered Muslim voters against a 154,188-vote 2020 margin (pp. 281–282)."}
+  ],
+  ws:"W17", wsTitle:"Exit Poll vs. Validated Voter vs. Campaign Claim", wsSub:"Turnout change, vote switching, composition, and ecological inference, with real 2024 numbers.", skill:"Evaluating election evidence",
+  slides:[["Lecture","GOVT325_Week17_Lecture_The-2024-Election.pdf"],["Article analysis","GOVT325_Week17_Article-Analysis.pdf"]],
+  practice:["What makes someone a 'validated voter' in Pew's study?","Explain the difference between turnout change and vote switching, using one Pew number for each.","Why can't an exit poll separate these two mechanisms?"],
+  content:""},
+ {id:"eday", special:true, n:"Election Day", d:"2026-11-03", mod:"m3", title:"Election Day — observe a polling place", note:"Tuesday. Your observation feeds the Election Observation Report (due Nov 9)."},
+ {id:"w12", n:"Week 12", d:"2026-11-09", mod:"m3", title:"Indigenous Politics: Sovereignty, Treaties, and Federalism",
+  q:"What changes when we treat tribal nations as governments rather than as interest groups?",
+  goal:"Understand tribal sovereignty as inherent, not granted, and practice government-to-government consultation.",
+  readings:[
+   {role:"Essential", cite:"Wilkins, D. E. (1998). Tribal-state affairs: American states as 'disclaiming' sovereigns. Publius, 28(4), 55–81.", design:"Legal-historical, normative", find:"State intrusion in Indian Country violates inherent sovereignty, treaties and the trust doctrine. Eleven Western states carry disclaimer clauses; Wilkins urges federal reclamation, with tribal-state accords as a step (p. 80)."},
+   {role:"Companion", cite:"Steinman, E. (2005). Legitimizing American Indian sovereignty. Law & Society Review, 39(4), 759–792.", design:"Case study (process tracing)", find:"Washington tribal leaders used the 'constitutive power of law' through institutional entrepreneurship and won the 1989 Centennial Accord."},
+   {role:"Primary source", cite:"One treaty, tribal constitution, or federal Indian-law opinion — instructor's choice (see Canvas).", design:"Primary document", find:""}
+  ],
+  ws:"W12", wsTitle:"Government-to-Government Consultation Memo", wsSub:"Treat a tribal nation as a government, not a stakeholder. The nation, state and pipeline are fictional; the laws are real.", skill:"Consultation practice",
+  slides:[["Lecture","GOVT325_Week12_Lecture_Indigenous-Politics.pdf"],["Article analysis","GOVT325_Week12_Article-Analysis.pdf"]],
+  practice:["What is a disclaimer clause?","What is Steinman's puzzle, and why isn't the Boldt decision a sufficient answer?","Where do the two readings agree on a remedy?"],
+  content:"Dispossession and broken treaties."},
+ {id:"w14", n:"Week 14", d:"2026-11-16", mod:"m4", title:"Intersectionality and Multiracial Identity",
+  q:"Is intersectionality a variable to add, or a different way to build theory — and are racial categories political choices?",
+  goal:"Understand intersectionality as a paradigm, not a methodological add-on; recognize government racial classifications as political choices.",
+  readings:[
+   {role:"Essential", cite:"Hancock, A.-M. (2007). Intersectionality as a normative and empirical paradigm. Politics & Gender, 3(2), 248–254.", design:"Theory essay", find:"Intersectionality is a normative and empirical research paradigm, not a content specialization (p. 249), resting on six assumptions (p. 251)."},
+   {role:"Companion", cite:"Davenport, L. D. (2016). Beyond Black and White. American Political Science Review, 110(1), 52–67.", design:"Survey + in-depth interviews", find:"On racial issues White-Black biracial identifiers resemble monoracial Black respondents (affirmative action: 71.7% vs. 75.7%); on social issues biracial groups are the most liberal (pp. 59–61)."}
+  ],
+  ws:"W14", wsTitle:"Redesign the Race and Ethnicity Question", wsSub:"Start from the federal standard, test it on real-world identities, and defend your design.", skill:"Category design",
+  slides:[["Lecture","GOVT325_Week14_Lecture_Intersectionality.pdf"],["Article analysis","GOVT325_Week14_Article-Analysis.pdf"]],
+  practice:["What is the difference between intersectionality as content specialization and as a paradigm?","On which issues do White-Black identifiers resemble Black respondents, and on which do they differ?"],
+  content:""},
+ {id:"thx", special:true, n:"Nov 23", d:"2026-11-23", mod:"m4", title:"No class — Thanksgiving week", note:"Reading week: catch up and work on your final project."},
+ {id:"w15", n:"Week 15", d:"2026-11-30", mod:"m4", title:"Religious Minorities and Political Incorporation",
+  q:"How do Muslim, Jewish, Sikh and Hindu Americans become political actors, and what do voters do with a candidate's religion?",
+  goal:"Understand distinct forms of political exclusion across more than one religious tradition; critically evaluate experimental designs.",
+  readings:[
+   {role:"Essential", cite:"Jamal, A. (2005). The political participation and engagement of Muslim Americans. American Politics Research, 33(4), 521–544.", design:"Survey (New York area, N = 335)", find:"Mosque involvement is tied to political activity only for Arab Muslims; for African American Muslims to group consciousness; for South Asian Muslims to civic activity (p. 535). Voting is excluded."},
+   {role:"Companion", cite:"Kalkan, K. O., Layman, G. C., & Green, J. C. (2018). Will Americans vote for Muslims? Politics and Religion, 11(4), 798–829.", design:"Survey experiment (CCES 2007, 2010)", find:"A Muslim cue lowers support, conditional on voters' cultural outgroup antipathy; the penalty is similar for Arab and African American candidates."},
+   {role:"Companion", cite:"Wald, K. D. (2015). The choosing people. Politics and Religion, 8(1), 4–35.", design:"Deviant case study", find:"American Jews vote to defend a liberal regime of religion and state that grants equal citizenship."},
+   {role:"Companion", cite:"Kurien, P. (2018). Shifting U.S. racial and ethnic identities and Sikh American activism. RSF, 4(5), 81–98.", design:"Historical-qualitative", find:"Shifts in Sikh American identity are group mobilization shaped by transnational events."},
+   {role:"Companion", cite:"Badrinathan, S., Kapur, D., & Vaishnav, M. (2026). Home and away. Political Behavior.", design:"Diaspora survey (N = 1,200)", find:"Indian Americans are more liberal on U.S. than on India policies; the gap is driven by Hindu respondents."}
+  ],
+  ws:"W15", wsTitle:"Candidate Evaluation Experiment Audit", wsSub:"Audit a published survey experiment: what can it establish, and what can't it?", skill:"Experimental design",
+  slides:[["Lecture","GOVT325_Week15_Lecture_Religious-Minorities.pdf"],["Article analysis","GOVT325_Week15_Article-Analysis.pdf"]],
+  practice:["Why does Jamal exclude voting, and what does he measure instead?","What is 'cultural outgroup antipathy', and how does it condition support for a Muslim candidate?","Why are Hindu Indian Americans' attitudes context-dependent?"],
+  content:"Hate crimes and anti-Muslim attitudes."},
+ {id:"w18", n:"Week 18", d:"2026-12-07", mod:"m4", title:"Coalition, Solidarity, and Inclusive Multiracial Democracy",
+  q:"Can shared experiences of discrimination build solidarity between communities of color — and when does that fail?",
+  goal:"Understand coalitions as political achievements, not demographic inevitabilities.",
+  readings:[
+   {role:"Essential", cite:"Pérez, E., Vicuña, B., & Ramos, A. (2024). Taking stock of solidarity between people of color. American Political Science Review, 118(3), 1549–1555.", design:"Mini meta-analysis of 5 experiments", find:"A cue about similar discrimination raises solidarity with other people of color (d = 0.175), and solidarity predicts support for policies that help the other group."},
+   {role:"Companion", cite:"Corral, Á. J. (2026). From commonality to unity. PS: Political Science & Politics, 59(3), 586–595.", design:"Survey (2020 CMPS, Latinx N = 4,006)", find:"Perceived Latinx–Black commonality predicts support for Black Lives Matter in 4 of 4 models; intragroup Latinx commonality is negatively associated in 2 of 4."}
+  ],
+  ws:"W18", wsTitle:"Coalition Design Exercise", wsSub:"Design a coalition that names its disagreements and survives pressure.", skill:"Coalition design",
+  slides:[["Lecture","GOVT325_Week18_Lecture_Coalition-Building-and-the-Future.pdf"],["Article analysis","GOVT325_Week18_Article-Analysis.pdf"]],
+  practice:["Trace Pérez et al.'s mediated pathway with its effect sizes. Which link is not randomized?","Why is the intragroup commonality finding surprising, and how does Corral interpret it?"],
+  content:""},
+ {id:"proj", special:true, n:"Dec 14", d:"2026-12-14", mod:"m4", title:"Final research project due (11:59 pm, Canvas)", note:"Final exam: exam week Dec 14–19, date set by the Registrar."}
+];
+const TEACH = WEEKS.filter(w=>!w.special);
+
+const GLOSSARY = [
+ ["Linked fate","The belief that what happens to your group affects your own life. Gay et al. find agreement with the standard item is common across groups and rarely political.","w03"],
+ ["Group consciousness","A multi-part attachment: commonality, perceived discrimination, and support for collective action. Broader than linked fate.","w03"],
+ ["FIRE battery","DeSante & Smith's four items (fear, institutionalized racism, empathy) measuring two dimensions of whites' racial attitudes.","w01"],
+ ["Four kinds of validity","Face, convergent, predictive and discriminant — DeSante & Smith's checks for whether a measure captures its concept.","w01"],
+ ["Scapegoating","Blaming a minority group for a crisis it did not cause; McClain traces it through U.S. history.","w01"],
+ ["Sociotropic vs. egotropic","Judging immigration by its effect on the country or community (sociotropic) vs. on your own wallet (egotropic).","w03"],
+ ["'Zombie theory'","H&H's name for labor-market competition: it keeps coming back despite repeated failed tests.","w03"],
+ ["Street-level bureaucrat","An official who applies rules in person (here, local election officials) and has discretion in how they help.","w05"],
+ ["Administrative burden","The learning, compliance and psychological costs people face when dealing with government.","w05"],
+ ["Racialized burdens","Ray, Herd & Moynihan: burdens that reproduce racial inequality while the rule itself looks neutral.","w05"],
+ ["Representative bureaucracy","The idea that a workforce resembling the public improves outcomes for underrepresented groups; Park & Favero show context limits it.","w05"],
+ ["Descriptive vs. substantive representation","Who holds office (descriptive) vs. how officeholders act on a group's interests (substantive).","w06"],
+ ["BVAP","Black voting-age population share of a district — the key variable in Cameron, Epstein & O'Halloran.","w06"],
+ ["Packing and cracking","Concentrating a group's voters in few districts (packing) or splitting them across many (cracking).","w06"],
+ ["Preclearance (VRA §5)","Federal review of voting changes in covered jurisdictions, effectively ended by Shelby County v. Holder (2013).","w06"],
+ ["Difference-in-differences","Compare the change in a treated group with the change in a comparison group, before and after an event.","w06"],
+ ["Racialized social pressure","White, Laird & Allen: in-group observation that enforces group political norms.","w08"],
+ ["Custodial citizens","Weaver & Lerman's term for people whose main contact with government is through police, courts and prisons.","w08"],
+ ["Pan-ethnicity","A broad category ('Latino', 'Asian American') built from many national-origin groups.","w09"],
+ ["Placebo-controlled experiment","A design where the control group gets an irrelevant message, so effects come from the message, not from being contacted.","w09"],
+ ["Genetic matching","Pairing similar respondents across groups on observed traits; it cannot rule out unobserved differences.","w09"],
+ ["Racial triangulation","Kim: Asian Americans valorized relative to Black Americans and ostracized as foreign relative to white Americans.","w11"],
+ ["Inter-coder reliability","How much two independent coders agree (e.g., Cohen's κ) — the test of a content-analysis scheme.","w11"],
+ ["Validated voter","A respondent whose reported vote is matched to an official voter-file record (Pew).","w17"],
+ ["Turnout change vs. vote switching","Different people voting vs. the same people changing their vote — Pew finds turnout mattered more in 2024.","w17"],
+ ["Ecological inference","Inferring individual behavior from group-level data; easy to get wrong.","w17"],
+ ["Inherent sovereignty","Tribal governing authority that predates the U.S. and is not granted by it.","w12"],
+ ["Disclaimer clause","A state constitutional provision disclaiming jurisdiction over Indian lands (Wilkins).","w12"],
+ ["Institutional entrepreneurship","Steinman: actors strategically using law and institutions to create new recognized arrangements.","w12"],
+ ["Intersectionality (as paradigm)","Hancock: categories interact and are dynamic; the theory changes, not just the control variables.","w14"],
+ ["Cultural outgroup antipathy","General dislike of culturally different groups; it conditions the penalty for Muslim candidates (Kalkan et al.).","w15"],
+ ["Deviant case","A case that departs from a general pattern, used to build theory (Wald on Jewish liberalism).","w15"],
+ ["Solidarity between people of color","Pérez et al.: a sense of shared position that can be raised by recognizing similar discrimination.","w18"],
+ ["Inter- vs. intragroup commonality","Commonality with another group vs. within your own; Corral finds they can pull in opposite directions.","w18"]
+];
+const MISTAKES = [
+ ["DeSante & Smith find three dimensions of whites' racial attitudes.",false,"Two higher-order dimensions, cognitive and affective (pp. 639, 642).","w01"],
+ ["Gay et al. show Black respondents score highest on linked fate on every measure.",false,"No significant difference among Black, White and Asian respondents on the race item (p. 127).","w03"],
+ ["Hainmueller & Hopkins is a meta-analysis of hundreds of studies.",false,"It is a narrative review of about 100 studies (p. 226).","w03"],
+ ["White, Nathan & Faller found larger bias in Republican counties.",false,"No partisan difference in bias, and no bias in VRA Section 5 jurisdictions (pp. 139–140).","w05"],
+ ["Park & Favero is an audit study of federal agencies.",false,"It is an observational study of public schools: gifted placement and suspensions (p. 666).","w05"],
+ ["Cameron, Epstein & O'Halloran recommend ~55% Black districts instead of 65%.",false,"About 47% in the South and an even spread elsewhere; 55% is only a Democratic-surge scenario (pp. 804, 808–809).","w06"],
+ ["Schmitt found 22% fewer Latino candidates in state legislatures.",false,"About half an official fewer per formerly covered county (≈ −7%), local offices, 2000–2021 (p. 9).","w06"],
+ ["White, Laird & Allen's outcome is support for race-related policies.",false,"Money given to the Obama campaign — not votes or policy views (pp. 789–797).","w08"],
+ ["Weaver & Lerman link jail or prison to roughly 22% lower turnout.",true,"Right for the Fragile Families sample (p. 827); Add Health shows −17%.","w08"],
+ ["Valenzuela & Michelson used door-to-door canvassing.",false,"A live bilingual phone bank plus a reminder (p. 622).","w09"],
+ ["Bromo et al. report 2024 vote shares by origin group.",false,"Their data end in 2020 (CMPS 2008–2020).","w09"],
+ ["Chan, Kim & Leung measured each person's exposure to Trump's rhetoric.",false,"They compare surveys before and after March 16, 2020; individual exposure was not measured (p. 625).","w11"],
+ ["Pew says 2024 shifts were mostly people switching parties.",false,"Shifts were 'largely the result of differences in which voters turned out' (p. 8).","w17"],
+ ["Steinman's case is tribal gaming compacts under IGRA.",false,"His case is Washington State's 1989 Centennial Accord.","w12"],
+ ["Davenport's study is a survey experiment.",false,"A survey plus in-depth interviews; no experiment (pp. 52, 61).","w14"],
+ ["Jamal shows mosque involvement makes Muslims more likely to vote.",false,"Voting is excluded; he measures nonvoting political acts (p. 527).","w15"],
+ ["Kalkan et al. find the Muslim-candidate penalty is stronger among conservatives.",false,"Ideology did not condition the effect (p. 812).","w15"],
+ ["In Pérez et al., the cue raised solidarity in every one of the five studies.",true,"Every study moves solidarity; the direct effect on policy varies (Tables 2–4).","w18"]
+];
+const DESIGN_Q = [
+ ["White, Nathan & Faller (2015)","Randomized field experiment"],["Valenzuela & Michelson (2016)","Randomized field experiment"],
+ ["White, Laird & Allen (2014)","Randomized experiment (lab/online)"],["Pérez, Vicuña & Ramos (2024)","Randomized experiment (lab/online)"],
+ ["Kalkan, Layman & Green (2018)","Survey experiment"],["Gay, Hochschild & White (2016)","Survey experiment"],
+ ["Slaughter, Crowder & Greer (2024)","Observational survey + regression"],["Corral (2026)","Observational survey + regression"],
+ ["Weaver & Lerman (2010)","Panel survey + matching"],["Schmitt (2026)","Difference-in-differences"],
+ ["Kim (1999)","Theory-building / historical-qualitative"],["Steinman (2005)","Theory-building / historical-qualitative"],
+ ["Hainmueller & Hopkins (2014)","Literature review / essay"],["Cameron, Epstein & O'Halloran (1996)","Estimation + simulation"]
+];
+const DESIGNS = ["Randomized field experiment","Randomized experiment (lab/online)","Survey experiment","Observational survey + regression","Panel survey + matching","Difference-in-differences","Theory-building / historical-qualitative","Literature review / essay","Estimation + simulation"];
+const SYNTH = [
+ ["Concept vs. measure","Use Gay et al. and DeSante & Smith to explain how a single survey item can mislead us about a concept.",["w01","w03"]],
+ ["Structure vs. attitudes","Compare where inequality comes from in White, Nathan & Faller and in Ray, Herd & Moynihan. Is anyone 'intending' to discriminate?",["w05"]],
+ ["Is representation enough?","Use Cameron et al. / Lublin and Park & Favero to argue whether descriptive representation is sufficient for equal outcomes.",["w05","w06"]],
+ ["Against 'the minority vote'","Use Gay et al., Bromo et al. and Pew to argue that group labels hide political diversity. What evidence would be needed to say a group 'shifted'?",["w03","w09","w17"]],
+ ["Ranking causal leverage","Rank White, Laird & Allen, Slaughter et al. and Weaver & Lerman by how strongly each supports a causal claim. Justify the order.",["w08"]],
+ ["Minorities as strategic actors","How do Steinman, Sediqe and Kurien show minority groups using institutions strategically?",["w12","w17","w15"]],
+ ["Two kinds of 'we'","Do linked fate (Gay et al.) and solidarity between people of color (Pérez et al.) measure the same thing? What would distinguish them?",["w03","w18"]],
+ ["Categories as choices","Using Hancock, Davenport and the Week 14 workshop, argue whether official racial categories are political choices.",["w14"]]
+];
+const METHODS = [
+ {name:"Randomized field experiment", claim:"X causes Y, in a real-world setting.", watch:"Narrow population or context; ethics of deception.", ex:[["White, Nathan & Faller (2015)","w05"],["Valenzuela & Michelson (2016)","w09"]]},
+ {name:"Randomized experiment (lab/online)", claim:"X causes Y under controlled conditions.", watch:"Students or online panels; attitudes or small stakes, not real votes.", ex:[["White, Laird & Allen (2014)","w08"],["Pérez, Vicuña & Ramos (2024)","w18"]]},
+ {name:"Survey experiment", claim:"A randomized cue or wording changes responses.", watch:"Hypothetical scenarios; may not carry over to real choices.", ex:[["Gay, Hochschild & White (2016)","w03"],["Kalkan, Layman & Green (2018)","w15"],["Thompson (2025, optional)","w03"]]},
+ {name:"Observational survey + regression", claim:"X is associated with Y for group G, net of controls.", watch:"Not causal; omitted variables; one election or year.", ex:[["Slaughter, Crowder & Greer (2024)","w08"],["Jamal (2005)","w15"],["Corral (2026)","w18"],["Davenport (2016)","w14"],["Badrinathan et al. (2026)","w15"]]},
+ {name:"Panel survey / matching", claim:"Change over time, or comparison of similar people, reduces selection worries.", watch:"Matching handles only observed traits; attrition.", ex:[["Weaver & Lerman (2010)","w08"],["Bromo et al. (2025)","w09"],["Pew (2025, descriptive)","w17"]]},
+ {name:"Difference-in-differences", claim:"An event changed outcomes in treated units relative to others.", watch:"Parallel trends can be made plausible, never proven.", ex:[["Schmitt (2026)","w06"]]},
+ {name:"Estimation + simulation", claim:"Given estimated relationships, which design maximizes a goal.", watch:"Results depend on the data range and the goal chosen.", ex:[["Cameron, Epstein & O'Halloran (1996)","w06"]]},
+ {name:"Historical, legal, qualitative", claim:"How and why a pattern or institution developed.", watch:"Generalization is argued, not tested.", ex:[["Kim (1999)","w11"],["Wilkins (1998)","w12"],["Steinman (2005)","w12"],["Kurien (2018)","w15"],["Wald (2015)","w15"]]},
+ {name:"Essays, reviews, critiques, theory", claim:"Frameworks, concepts, and judgments about a literature.", watch:"No new data; check the evidence each claim rests on.", ex:[["McClain (2021)","w01"],["Hancock (2007)","w14"],["Ray, Herd & Moynihan (2023)","w05"],["Hainmueller & Hopkins (2014)","w03"],["Lublin (1999)","w06"],["Sediqe (2025)","w17"]]},
+ {name:"Measurement study", claim:"A measure captures its concept (validity tests).", watch:"Validated in one population; avoid 'blind use'.", ex:[["DeSante & Smith (2020)","w01"]]}
+];
+const PERSONAS = [
+ {id:"plan", t:"I like a plan", s:"Dates, deadlines and what's next.", steps:[["See what's coming up","#weeks"],["Check grading and the what-if calculator","#assignments"],["Pick a final project and set personal milestones","#assignments"],["Build a two-week plan for the final","#exam"]]},
+ {id:"big", t:"Show me the big picture", s:"How the weeks connect.", steps:[["Open the course map and switch on a thread","#map"],["Read each module's one-line purpose","#map"],["Try the synthesis practice prompts","#exam"]]},
+ {id:"read", t:"I learn by reading closely", s:"Readings, designs and page-cited findings.", steps:[["Open this week's readings and their findings","#weeks"],["Use the six-step reading template","#methods"],["Check the methods toolbox for each article's design","#methods"]]},
+ {id:"do", t:"I learn by doing", s:"Workshops and hands-on practice.", steps:[["Open the workshop list","#workshops"],["Try the design-matching quiz","#exam"],["Use the grade what-if calculator","#assignments"]]},
+ {id:"exam", t:"Exams are on my mind", s:"Practice, flashcards, common mistakes.", steps:[["Open the midterm study page","#exam"],["Flashcards across the course","#exam"],["Right-or-wrong: common mistakes from older slides","#exam"]]},
+ {id:"miss", t:"I missed a class", s:"A short catch-up path for any week.", steps:[["Open the week you missed and use its 'Missed this class?' box","#weeks"],["Email your instructor before class when you can, and do the Canvas alternate assignment","#support"]]},
+ {id:"lang", t:"English isn't my first language", s:"Plain-language terms and reading tips.", steps:[["Use the glossary (plain-language definitions)","#exam"],["Read the reading tips","#support"],["Turn on wider spacing and larger text","#home"]]},
+ {id:"quiet", t:"I'd rather not speak in class", s:"Other ways to participate.", steps:[["See alternate ways to earn participation","#support"],["Workshops: the team page lets you contribute in writing","#workshops"]]}
+];
+
+const FIG = {
+ w03:{t:"Agree that what happens to their racial group affects them (%)", max:100, rows:[["Black",[77]],["White",[73]],["Asian",[67]],["Hispanic",[45]]], src:"Gay, Hochschild & White (2016), p. 127 (2009 survey)."},
+ w05:{t:"Local election officials who replied (%)", max:100, series:["Latino-named sender","Non-Latino white sender"], rows:[["Voter ID email",[64.8,70.5]],["Control email",[72.4,74.7]]], src:"White, Nathan & Faller (2015), Table 2, p. 134."},
+ w06:{type:"dist", t:"Same voters, two goals: Black VAP % in each of five districts (hypothetical Southern state, 25% Black)", rows:[["Maximize civil-rights votes",[10,10,11,47,47]],["Maximize Black members",[0,0,0,62.5,62.5]]], src:"Cameron, Epstein & O'Halloran (1996), Table 6, p. 808."},
+ w08:{t:"Reported turnout among citizens, Nov. 2024 (%)", max:100, rows:[["Black women",[62.9]],["Black men",[55.7]],["White non-Hispanic women",[71.6]],["White non-Hispanic men",[69.3]]], src:"U.S. Census Bureau, CPS November 2024, Table 2 (self-reported)."},
+ w09:{t:"Hispanic validated voters' presidential vote (%)", max:100, series:["Democrat","Republican"], rows:[["2020",[61,36]],["2024",[51,48]]], src:"Pew Research Center, validated voters, June 26, 2025."},
+ w11:{t:"Asian American validated voters choosing Trump (%)", max:100, rows:[["2020",[30]],["2024",[40]]], src:"Pew Research Center, validated voters, June 26, 2025."},
+ w17:{type:"stack", t:"What 2020 voters did in 2024 (%)", series:["Same party again","Switched","Stayed home"], rows:[["Trump 2020 voters",[85,4,11]],["Biden 2020 voters",[79,6,15]]], src:"Pew Research Center (2025), p. 10."},
+ w14:{t:"Support affirmative action, by parentage and identification (%)", max:100, rows:[["Monoracial White",[44.4]],["Biracial, identifies White",[52.9]],["Biracial, identifies White-Black",[71.7]],["Biracial, identifies Black",[75.0]],["Monoracial Black",[75.7]]], src:"Davenport (2016), Tables 3–5, pp. 59–61 (college freshmen, 2001–2003)."},
+ w18:{t:"Effect of a similar-discrimination cue on solidarity (Cohen's d)", max:.3, dec:3, rows:[["Study 1 · Asian",[.218]],["Study 2 · Latino",[.217]],["Study 3 · MENA",[.242]],["Study 4 · Black",[.129]],["Study 5 · Latino",[.131]],["Meta-analysis",[.175]]], src:"Pérez, Vicuña & Ramos (2024), Tables 2–4, pp. 1551–1552."}
+};
+/* News items were verified for the October slide revisions. Dates are publication dates. */
+const NEWS = {
+ w01:[["2026-03-25","Pew Research Center (K. Hurst)","How Americans view racial diversity ahead of the 250th anniversary","A broad question ('good for the country') shows wide agreement; a more specific one, about the impact on culture, shows a 37-point party gap.","Question wording shapes what we find: the measurement problem behind FIRE and the Week 1 workshop."]],
+ w03:[["2026-09-13","Associated Press (M. Brown)","Inside a Philadelphia barbershop, Black men debate their political past and future","Per AP VoteCast, about one-quarter of Black men backed Trump in 2024, up from 12% in 2020; the men argue over group loyalty.","A group-loyalty norm enforced in conversation. Is that linked fate, group consciousness, or something the standard item misses?"],
+      ["2026-09-03","NPR (X. Bustillo)","Immigration policies prompt differing messages from Republicans and Democrats","Republicans are spending far more on immigration ads, focused on enforcement; Democrats criticize enforcement tactics and costs.","H&H conclusions 6–7: elite rhetoric matters, and immigration-attitude research has been 'surprisingly divorced' from partisanship (p. 244)."]],
+ w05:[["2026-09-18","NPR (J. Joffe-Block & M. Parks)","It's illegal for armed federal officers to be at polls. Lawsuits seek to ensure that","Citing UC San Diego research: roughly 40% of voters think ICE agents are likely at polling places near them; voters of color are more likely to fear being questioned.","A burden can come from perceived risk, not just paperwork: a psychological cost of voting."],
+      ["2026-07-23","NPR (J. Kim)","Over 4 million people are no longer on SNAP since last July","An estimated 4 million+ people lost SNAP benefits after the July 2025 law expanding work requirements; applicants report growing documentation demands.","Learning and compliance costs, exactly Ray, Herd & Moynihan's categories."]],
+ w06:[["2026-09-18","NAACP Legal Defense Fund","Redistricting Watch 13.0: tracking Louisiana v. Callais' aftermath","The 2026 map fights are still in court; a new Louisiana hearing is set for Oct. 27.","Pick one case and ask: what would Cameron et al., Lublin, and Schmitt each predict?"],
+      ["2026-05-29","NBC News (J. C. Timm)","Louisiana passes new congressional map, dismantling one majority-Black district","After the Supreme Court's 6–3 Callais ruling (Apr. 29, 2026, per NPR), Louisiana enacted a map with one majority-Black district.","Lublin's lens: without near-majority districts, expect fewer Black members."],
+      ["2025-05-01","NPR (D. Elliott)","New congressional district gives voice to Black voters in Alabama","A court-drawn 2nd District at 48.7% Black VAP elected Shomari Figures (D) in 2024, after Allen v. Milligan (2023).","CEO: a Black candidate can win below 50%. Lublin: the district exists because a court required it."]],
+ w08:[["2026-08-01","Virginia Mercury via WTOP","Spanberger restores voting rights to more than 60,000 Virginians","Gov. Spanberger restored rights to 66,085 people; on Nov. 3, 2026 Virginians vote on automatic restoration on release from prison (NPR, Nov. 24, 2025).","Weaver & Lerman: restoring the right may not undo the civic lessons of contact with the system."]],
+ w09:[["2026-07-09","Pew Research Center","Identity strength and Latino voters (National Survey of Latinos, Oct. 2025)","Latino voters differ by party in how important being Latino is to them; a Latin Times report (Sept. 21, 2026) notes Republicans hold a narrow 44%–43% edge among Florida Latinos.","Valenzuela & Michelson: ethnic appeals work where identity is strong. Bromo et al.: origin matters (Florida's Cuban and Venezuelan voters)."]],
+ w11:[["2026-05-04","Associated Press via PBS NewsHour (T. Tang)","Fewer AAPI adults experienced hate incidents in past year but racism concerns linger, poll finds","AP-NORC/AAPI Data: about 3 in 10 AAPI adults think it is extremely or very likely they will face discrimination in the next five years.","Kim's civic ostracism: being treated as 'not from here' persists even as reported incidents fall."]],
+ w12:[["2025-12-20","NPR (K. Wright)","North Carolina's Lumbee Tribe receives full federal recognition after 137-year effort","The Lumbee Fairness Act passed in the 2026 NDAA, after a first petition to Congress in 1888 and partial recognition in 1956.","Recognition opens the government-to-government trust relationship Wilkins describes."]],
+ w14:[["2026-05-05","NPR (T. Mosley)","A legal scholar and 'Backtalker' defends critical race theory — a term she helped coin","Kimberlé Crenshaw's 2026 memoir traces 'intersectionality' to DeGraffenreid v. General Motors (1976).","Accuracy check: some syndicated versions call DeGraffenreid a Supreme Court case. It was a federal district court decision."]],
+ w15:[["2026-06-13","KERA News","Frisco elects new mayor in runoff race that mirrored divisions over Muslim residents","A candidate who said people 'of Sharia' were not welcome lost the runoff, about 58–42.","A real-world version of Kalkan et al.'s question: will voters reward an anti-Muslim message?"]],
+ w18:[["2026-09-18","NPR (J. Joffe-Block & M. Parks)","It's illegal for armed federal officers to be at polls. Lawsuits seek to ensure that","Asian American, Latino and Black organizations (AALDEF, OCA, Mi Familia en Acción, NAACP) and four unions sued together.","A non-zero-sum shared threat, the kind of issue where Pérez et al. and Corral expect solidarity."]]
+};
+function figHTML(id){
+  const f=FIG[id]; if(!f) return "";
+  const cols=["--c1","--c2","--c3"]; const dec=f.dec||1;
+  const val=v=>Number.isInteger(v)&&!f.dec?String(v):v.toFixed(dec).replace(/\.0+$/,"");
+  const leg=f.series&&f.series.length>1?`<div class="legend">${f.series.map((s,i)=>`<span><i style="background:var(${cols[i]})"></i>${esc(s)}</span>`).join("")}</div>`:"";
+  let body="";
+  if(f.type==="dist"){
+    body=f.rows.map(([l,vs])=>`<div class="stack" style="gap:4px"><span class="bl small">${esc(l)}</span><div class="dists" role="img" aria-label="${esc(l)}: ${vs.join(", ")} percent">${vs.map(v=>`<span title="${v}% Black VAP" style="height:${Math.max(2,v/70*100)}%;background:var(--c1)"><em>${v}</em></span>`).join("")}</div></div>`).join("");
+  } else if(f.type==="stack"){
+    body=f.rows.map(([l,vs])=>`<div class="brow"><span class="bl">${esc(l)}</span><div class="stack" style="gap:3px"><div class="stackbar" role="img" aria-label="${esc(l)}: ${vs.map((v,i)=>f.series[i]+" "+v+"%").join(", ")}">${vs.map((v,i)=>`<span title="${esc(f.series[i])}: ${v}%" style="width:${v}%;background:var(${cols[i]})"></span>`).join("")}</div><span class="small num">${vs.map((v,i)=>esc(f.series[i])+" "+v+"%").join(" · ")}</span></div></div>`).join("");
+  } else {
+    body=f.rows.map(([l,vs])=>`<div class="brow"><span class="bl">${esc(l)}</span><div class="bars">${vs.map((v,i)=>`<div class="btrack" title="${esc(l)}${f.series?" · "+esc(f.series[i]):""}: ${val(v)}"><div class="bwrap"><div class="bar" style="width:${v/f.max*100}%;background:var(${cols[i]})"></div></div><span class="bv">${val(v)}</span></div>`).join("")}</div></div>`).join("");
+  }
+  return `<div class="panel fig"><span class="eyebrow">Key figure</span><p class="ft">${esc(f.t)}</p>${leg}${body}<p class="src">Source: ${esc(f.src)}</p></div>`;
+}
+function newsHTML(id,limit){
+  const n=(NEWS[id]||[]).slice(0,limit||9); if(!n.length) return "";
+  return n.map(([d,src,h,what,conn])=>`<div class="news"><span class="mono muted">${fmt(d)}, ${d.slice(0,4)} · ${esc(src)}</span><span class="h">${esc(h)}</span><p class="small">${esc(what)}</p><p class="c"><b>Connect:</b> ${esc(conn)}</p></div>`).join("");
+}
+
+/* ===================== STATE ===================== */
+const KEY="govt325-hub-v1";
+let S={done:{}, persona:null, settings:{theme:"system",scale:"1",readable:"0",calm:"0"}, finalDate:"2026-12-16"};
+try{const raw=localStorage.getItem(KEY); if(raw){const o=JSON.parse(raw); S={...S,...o, settings:{...S.settings,...(o.settings||{})}};}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+
+/* ===================== HELPERS ===================== */
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const DAYS=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+function pd(s){const [y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d)}
+function fmt(s,withDay){const d=pd(s); return (withDay?DAYS[d.getDay()]+", ":"")+MONTHS[d.getMonth()]+" "+d.getDate()}
+function today(){const t=new Date(); return new Date(t.getFullYear(),t.getMonth(),t.getDate())}
+function daysUntil(s){return Math.round((pd(s)-today())/86400000)}
+function status(w){const n=daysUntil(w.d); if(n<0) return "done"; return "up"}
+function nextSession(){return WEEKS.find(w=>daysUntil(w.d)>=0 && !(w.special && !w.exam && w.id!=="eday"))}
+function wById(id){return WEEKS.find(w=>w.id===id)}
+function statusChip(w){
+  const n=daysUntil(w.d); const nx=nextSession();
+  if(n<0) return '<span class="chip done">Done</span>';
+  if(nx && nx.d===w.d) return '<span class="chip next">'+(n===0?"Today":"Next · in "+n+" day"+(n===1?"":"s"))+'</span>';
+  return '<span class="chip up">Upcoming · may change</span>';
+}
+function modChip(m){return '<span class="chip '+m+'">'+esc(MODULES[m].short)+'</span>'}
+
+/* ===================== VIEWS ===================== */
+const views={};
+views.home=()=>{
+  const nx=nextSession();
+  const sameDay=WEEKS.filter(w=>nx && w.d===nx.d);
+  const cds=[["2026-10-12","Midterm"],["2026-11-03","Election Day"],["2026-11-09","Observation report due"],["2026-12-14","Final project due"]];
+  const arc=TEACH.map(w=>{const st=status(w); const isNext=nx&&w.d===nx.d; return '<a class="seg '+(st==="done"?"done":isNext?"next":"")+'" href="#'+w.id+'" title="'+esc(w.n+": "+w.title)+'" aria-label="'+esc(w.n)+'"></a>'}).join("");
+  const doneCount=TEACH.filter(w=>status(w)==="done").length;
+  const p=PERSONAS.find(x=>x.id===S.persona);
+  return `<section class="view">
+   <div class="stack"><span class="eyebrow">Course hub</span><h1>Everything for GOVT 325, in one place</h1>
+   <p class="lede">Slides, readings, workshops and exam prep for each class, plus a map of how the weeks connect. Start with what's next, or pick how you like to study.</p></div>
+   <div class="hero">
+    <div class="panel nextcard stack">
+     <span class="eyebrow">Next class · ${nx?fmt(nx.d,true):""}</span>
+     ${sameDay.map(w=>`<div class="stack"><h2>${esc(w.special?w.title:w.n+": "+w.title)}</h2>${w.note?`<p class="muted">${esc(w.note)}</p>`:""}${w.after?`<p class="muted">${esc(w.after)}</p>`:""}${!w.special?`<p class="question" style="font-size:1.05rem">${esc(w.q)}</p><div class="row"><a class="btn" href="#${w.id}">Open ${esc(w.n)}</a>${LINKS[w.ws]?`<a class="btn ghost" href="${LINKS[w.ws]}" target="_blank" rel="noopener">Workshop page ↗</a>`:""}</div>`:""}${w.exam?`<div class="row"><a class="btn" href="${LINKS.midterm}" target="_blank" rel="noopener">Midterm study page ↗</a></div>`:""}</div>`).join('<hr class="rule">')}
+    </div>
+    <div class="stack">
+     <div class="countdowns">${cds.map(([d,l])=>{const n=daysUntil(d); return `<div class="cd"><div class="n">${n<0?"✓":n}</div><div class="l">${n<0?"Passed":n===1?"day":"days"} · ${esc(l)}<br><span class="mono">${fmt(d,true)}</span></div></div>`}).join("")}</div>
+     <div class="panel stack"><div class="row" style="justify-content:space-between"><span class="eyebrow">Semester progress</span><span class="mono num">${doneCount}/${TEACH.length} sessions</span></div><div class="arc">${arc}</div><p class="small muted">Final exam: exam week, Dec 14–19 (Registrar sets the date).</p></div>
+    </div>
+   </div>
+   <div class="stack"><h2>How do you like to study?</h2><p class="muted">Pick one for a short path through the hub. You can switch any time.</p>
+    <div class="grid g4">${PERSONAS.map(x=>`<button type="button" class="persona" data-persona="${x.id}" aria-pressed="${S.persona===x.id}"><b>${esc(x.t)}</b><span>${esc(x.s)}</span></button>`).join("")}</div>
+    ${p?`<div class="path"><b>${esc(p.t)}: your path</b><ol>${p.steps.map(([t,h])=>`<li><a href="${h}">${esc(t)}</a></li>`).join("")}</ol></div>`:""}
+   </div>
+   <div class="stack"><h2>Recently in the news</h2><p class="muted">Stories connected to the readings, from NPR, AP, Pew, NBC and others. Each one links to its week.</p>
+    <div class="grid g2">${Object.entries(NEWS).flatMap(([id,arr])=>arr.map(a=>[id,...a])).sort((a,b)=>b[1].localeCompare(a[1])).slice(0,4).map(([id,d,src,h,what])=>`<a class="weekcard ${wById(id).mod}" href="#${id}"><span class="mono muted">${fmt(d)}, ${d.slice(0,4)} · ${esc(src)}</span><h3>${esc(h)}</h3><p class="small muted">${esc(what)}</p><span class="small">${esc(wById(id).n)} →</span></a>`).join("")}</div></div>
+   <div class="grid g2">
+    <div class="panel stack"><span class="eyebrow">How each class runs</span>
+     <div class="tablewrap"><table class="t"><tbody>
+      <tr><td class="mono">5:30–6:00</td><td>Arrival and recap of last week</td></tr>
+      <tr><td class="mono">6:00–6:45</td><td>Mini-lecture: theory and concepts</td></tr>
+      <tr><td class="mono">6:45–7:00</td><td>Break</td></tr>
+      <tr><td class="mono">7:00–8:15</td><td>Workshop in teams</td></tr>
+      <tr><td class="mono">8:15–8:30</td><td>Debrief and next-week preview</td></tr></tbody></table></div></div>
+    <div class="panel stack"><span class="eyebrow">Five ideas the evidence builds toward</span>
+     <ol class="qlist">${THREADS.slice(0,5).map(t=>`<li><b>${esc(t.name)}.</b> <span class="muted">${esc(t.text)}</span></li>`).join("")}</ol>
+     <a href="#map" class="small">See them as threads on the course map →</a></div>
+   </div>
+  </section>`;
+};
+views.map=()=>{
+  return `<section class="view">
+   <div class="stack"><span class="eyebrow">Course map</span><h1>How the course fits together</h1>
+   <p class="lede">Four modules, thirteen class meetings. Select a session to open it. Switch on a thread to see which weeks build each big idea.</p></div>
+   <div class="threads" role="group" aria-label="Course threads">${THREADS.map(t=>`<button type="button" class="threadbtn" data-thread="${t.id}" aria-pressed="false">${esc(t.name)}</button>`).join("")}</div>
+   <p class="small muted" id="threadText">Threads come from the syllabus's "inclusive message" and the course's methods goal; which weeks belong to each is an interpretive guide, not an exam key.</p>
+   <div class="mapwrap"><svg id="mapsvg" viewBox="0 0 1000 700" role="img" aria-label="Course mind map"></svg></div>
+   <div class="grid g4">${Object.entries(MODULES).map(([k,m])=>`<div class="panel stack" style="border-top:4px solid var(--${k})"><b>${esc(m.name)}</b><p class="small muted">${esc(m.blurb)}</p></div>`).join("")}</div>
+   <div class="panel"><span class="eyebrow">Timeline</span><div class="timeline">${WEEKS.map(w=>`<div class="tl ${w.special?"special":""}"><div class="d">${fmt(w.d,true)}</div><div class="t">${w.special?`<b>${esc(w.title)}</b>${w.note?` <span class="small muted">· ${esc(w.note)}</span>`:""}`:`<a href="#${w.id}">${esc(w.n)}: ${esc(w.title)}</a>`} ${w.special?"":statusChip(w)}</div></div>`).join("")}</div></div>
+  </section>`;
+};
+function drawMap(){
+  const svg=$("#mapsvg"); if(!svg) return;
+  const cx=500, cy=350;
+  const modPos={m1:[330,150],m2:[670,150],m3:[670,520],m4:[330,520]};
+  const place={w01:[110,95],w03:[110,205],w05:[890,95],w06:[890,205],w08:[890,380],w09:[890,450],w11:[890,520],w17:[890,590],w12:[890,660],w14:[110,450],w15:[110,540],w18:[110,630]};
+  const pos={};
+  let out=`<g>`;
+  Object.entries(modPos).forEach(([m,[x,y]])=>{out+=`<path class="edge" d="M${cx},${cy} L${x},${y}"/>`});
+  TEACH.forEach(w=>{const [x,y]=place[w.id]; const [mx,my]=modPos[w.mod]; pos[w.id]=[x,y]; const ex=x<mx?x+88:x-88; out+=`<path class="edge" d="M${mx},${my} C${(mx+ex)/2},${my} ${(mx+ex)/2},${y} ${ex},${y}"/>`});
+  out+=`</g><g id="threadlayer"></g>`;
+  out+=`<g><circle cx="${cx}" cy="${cy}" r="70" fill="var(--ink)"/><text x="${cx}" y="${cy-6}" text-anchor="middle" style="fill:var(--paper);font-family:var(--f-display);font-size:17px;font-weight:650">Minority Politics</text><text x="${cx}" y="${cy+16}" text-anchor="middle" style="fill:var(--paper);font-size:13px">in the United States</text></g>`;
+  Object.entries(modPos).forEach(([m,[x,y]])=>{
+    out+=`<g><rect x="${x-92}" y="${y-22}" width="184" height="44" rx="22" fill="var(--${m})"/><text x="${x}" y="${y+5}" text-anchor="middle" style="fill:var(--paper);font-weight:700;font-size:14px">${esc(MODULES[m].short)}</text></g>`;
+  });
+  TEACH.forEach(w=>{
+    const [x,y]=pos[w.id]; const st=status(w); const nx=nextSession(); const isNext=nx&&nx.d===w.d;
+    const short=w.title.split(":")[0].replace(/,.*$/,""); const label=short.length>26?short.slice(0,25)+"…":short;
+    out+=`<g class="node" data-id="${w.id}" tabindex="0" role="link" aria-label="${esc(w.n+": "+w.title)}"><rect x="${x-88}" y="${y-24}" width="176" height="48" rx="8" stroke="var(--${w.mod})"/>
+    <text x="${x-78}" y="${y-5}" style="font-size:11px;font-family:var(--f-mono);fill:var(--muted)">${esc(w.n.toUpperCase())} · ${fmt(w.d)}${st==="done"?" ✓":isNext?" ●":""}</text>
+    <text x="${x-78}" y="${y+13}" style="font-size:13px;font-weight:600">${esc(label)}</text></g>`;
+  });
+  svg.innerHTML=out; svg._pos=pos;
+  svg.querySelectorAll(".node").forEach(g=>{
+    const go=()=>{location.hash=g.dataset.id};
+    g.addEventListener("click",go); g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}});
+  });
+  document.querySelectorAll(".threadbtn").forEach(b=>b.addEventListener("click",()=>{
+    const on=b.getAttribute("aria-pressed")!=="true";
+    document.querySelectorAll(".threadbtn").forEach(x=>x.setAttribute("aria-pressed","false"));
+    b.setAttribute("aria-pressed",on?"true":"false"); showThread(on?b.dataset.thread:null);
+  }));
+}
+function showThread(id){
+  const svg=$("#mapsvg"); const layer=$("#threadlayer"); const pos=svg._pos; layer.innerHTML="";
+  svg.querySelectorAll(".node").forEach(n=>n.classList.remove("dim"));
+  const txt=$("#threadText");
+  if(!id){txt.textContent="Threads come from the syllabus's \"inclusive message\" and the course's methods goal; which weeks belong to each is an interpretive guide, not an exam key."; return}
+  const t=THREADS.find(x=>x.id===id); const ids=TEACH.map(w=>w.id).filter(x=>t.weeks.includes(x));
+  svg.querySelectorAll(".node").forEach(n=>{if(!ids.includes(n.dataset.id)) n.classList.add("dim")});
+  ids.forEach(x=>{const [a,b]=pos[x]; layer.innerHTML+=`<rect x="${a-94}" y="${b-30}" width="188" height="60" rx="11" fill="none" stroke="var(${t.color})" stroke-width="3"/>`});
+  txt.innerHTML=`<b>${esc(t.name)}:</b> ${esc(t.text)} <span class="muted">Weeks: ${ids.map(x=>esc(wById(x).n)).join(", ")}.</span>`;
+}
+views.weeks=()=>`<section class="view">
+  <div class="stack"><span class="eyebrow">Weeks</span><h1>Class by class</h1><p class="lede">Every session is open, including upcoming ones, so you can read ahead. Upcoming weeks may still change; Canvas has the final word.</p></div>
+  ${Object.entries(MODULES).map(([m,mod])=>`<div class="stack"><h2>${esc(mod.name)}</h2><div class="grid g3">${WEEKS.filter(w=>w.mod===m).map(w=>w.special?
+   `<div class="weekcard ${m}" style="border-style:dashed"><span class="mono muted">${fmt(w.d,true)}</span><h3>${esc(w.title)}</h3>${w.note?`<p class="small muted">${esc(w.note)}</p>`:""}${w.exam?`<a class="small" href="${LINKS.midterm}" target="_blank" rel="noopener">Midterm study page ↗</a>`:""}</div>`:
+   `<a class="weekcard ${m}" href="#${w.id}"><div class="row" style="justify-content:space-between"><span class="mono muted">${esc(w.n)} · ${fmt(w.d,true)}</span>${S.done[w.id]?'<span class="chip done">Reviewed ✓</span>':statusChip(w)}</div><h3>${esc(w.title)}</h3><p class="small muted">${esc(w.q)}</p></a>`).join("")}</div></div>`).join("")}
+ </section>`;
+function weekView(w){
+  const i=TEACH.indexOf(w); const prev=TEACH[i-1], next=TEACH[i+1];
+  const th=THREADS.filter(t=>t.weeks.includes(w.id));
+  const slides=w.slides.map(([label,f])=>{const ok=PDF_READY.has(f); return `<button type="button" class="slidebtn" ${ok?`data-pdf="${esc(f)}" data-title="${esc(w.n+" · "+label)}"`:"disabled"}><span>${esc(label)}</span><span class="small ${ok?"":"muted"}">${ok?"View slides":"PDF coming soon"}</span></button>`}).join("");
+  return `<section class="view">
+   <div class="weekhead"><a href="#weeks" class="small">← All weeks</a>
+    <div class="row">${modChip(w.mod)}${statusChip(w)}<span class="mono muted">${fmt(w.d,true)} · 5:30–8:30 pm</span></div>
+    <span class="eyebrow">${esc(w.n)}</span><h1>${esc(w.title)}</h1>
+    ${w.after?`<p class="note">${esc(w.after)} Check Canvas for the exact timing.</p>`:""}
+    <p class="question">${esc(w.q)}</p>
+    ${w.content?`<p class="small"><span class="chip warn">Content note</span> <span class="muted">${esc(w.content)} You may step out without penalty; see <a href="#support">Support</a>.</span></p>`:""}
+   </div>
+   <div class="twocol">
+    <div class="stack">
+     <div class="panel"><span class="eyebrow">Readings · what each one finds</span>
+      ${w.readings.map(r=>`<div class="reading"><div class="meta"><span class="chip">${esc(r.role)}</span><span class="chip">${esc(r.design)}</span></div><p class="cite">${esc(r.cite)}</p>${r.find?`<p class="find">${esc(r.find)}</p>`:""}</div>`).join("")}
+      <p class="small muted" style="margin-top:8px">Full texts are on Canvas. Findings are summaries for orientation, not a substitute for reading.</p>
+     </div>
+     ${figHTML(w.id)}
+     ${NEWS[w.id]?`<div class="panel"><span class="eyebrow">In the news</span>${newsHTML(w.id)}<p class="small muted" style="margin-top:8px">Checked for the October slide revisions. Stories may have developed since; read the outlet for updates.</p></div>`:""}
+     <div class="panel stack"><span class="eyebrow">Check yourself</span><ol class="qlist">${w.practice.map(q=>`<li>${esc(q)}</li>`).join("")}</ol><p class="small muted">From the article-analysis slides. Practice questions, not exam items.</p></div>
+     <details class="box"><summary>Missed this class? A 30-minute catch-up</summary><div><ol class="qlist">
+      <li>Read the big question above and the learning goal (2 min).</li>
+      <li>Read the "what each one finds" summaries, then the article-analysis slides (12 min).</li>
+      <li>Skim the lecture slides for the concepts in bold (8 min).</li>
+      <li>Open the workshop page and try its first task on your own (5 min).</li>
+      <li>Answer the "Check yourself" questions in two sentences each (3 min).</li>
+     </ol><p class="small muted" style="margin-top:8px">Per the syllabus: email your instructor before class when you can, and complete the alternate assignment on Canvas to avoid the absence penalty.</p></div></details>
+    </div>
+    <div class="stack">
+     <div class="panel stack"><span class="eyebrow">Slides (PDF)</span><div class="slidelist">${slides}</div><p class="small muted">Opens in a viewer here. On a slow connection, use "Open PDF".</p></div>
+     <div class="ws"><span class="eyebrow">Workshop · ${esc(w.skill)}</span><h3>${esc(w.wsTitle)}</h3><p class="small muted">${esc(w.wsSub)}</p>${LINKS[w.ws]?`<a class="btn" href="${LINKS[w.ws]}" target="_blank" rel="noopener">Open workshop page ↗</a>`:""}<p class="small muted">Your team submits a code on the page and pastes it into Canvas.</p></div>
+     <div class="panel stack"><span class="eyebrow">Learning goal</span><p>${esc(w.goal)}</p></div>
+     ${th.length?`<div class="panel stack"><span class="eyebrow">Threads this week builds</span>${th.map(t=>`<p class="small"><b>${esc(t.name)}</b> <span class="muted">· also ${t.weeks.filter(x=>x!==w.id).map(x=>`<a href="#${x}">${esc(wById(x).n)}</a>`).join(", ")}</span></p>`).join("")}</div>`:""}
+     <label class="check panel"><input type="checkbox" id="done-${w.id}" data-done="${w.id}" ${S.done[w.id]?"checked":""}> I've reviewed this week</label>
+    </div>
+   </div>
+   <div class="row" style="justify-content:space-between">${prev?`<a href="#${prev.id}">← ${esc(prev.n)}</a>`:"<span></span>"}${next?`<a href="#${next.id}">${esc(next.n)} →</a>`:""}</div>
+  </section>`;
+}
+views.workshops=()=>`<section class="view">
+  <div class="stack"><span class="eyebrow">Workshops</span><h1>Twelve workshops, twelve skills</h1><p class="lede">Each workshop is a team page: a timer, one tab per step, autosave, and a team code you paste into Canvas. Your instructor can show the class comparison afterwards.</p></div>
+  <div class="grid g3">${TEACH.map(w=>`<div class="ws" style="border-top:4px solid var(--${w.mod})"><div class="row" style="justify-content:space-between"><span class="mono muted">${esc(w.n)} · ${fmt(w.d)}</span>${statusChip(w)}</div><h3>${esc(w.wsTitle)}</h3><p class="small muted">${esc(w.wsSub)}</p><div class="row"><span class="chip">${esc(w.skill)}</span></div><div class="row"><a class="btn" href="${LINKS[w.ws]}" target="_blank" rel="noopener">Open ↗</a><a class="btn ghost" href="#${w.id}">Week page</a></div></div>`).join("")}</div>
+  <p class="note small">If a workshop link asks you to sign in or says you don't have access, your instructor hasn't shared it yet. Try again closer to class.</p>
+ </section>`;
+
+let examTab="overview";
+views.exam=()=>`<section class="view">
+  <div class="stack"><span class="eyebrow">Exam prep</span><h1>Midterm and final</h1><p class="lede">Practice here is built from the readings and slides. None of it is an exam item.</p></div>
+  <div class="subtabs" role="tablist">${[["overview","Overview"],["flash","Flashcards & glossary"],["design","Match the design"],["mist","Right or wrong?"],["synth","Synthesis prompts"],["plan","Two-week plan"]].map(([k,l])=>`<button type="button" role="tab" data-et="${k}" aria-selected="${examTab===k}">${l}</button>`).join("")}</div>
+  <div id="examBody"></div>
+ </section>`;
+function examBody(){
+  const b=$("#examBody"); if(!b) return;
+  if(examTab==="overview"){
+    b.innerHTML=`<div class="grid g2">
+     <div class="panel stack"><span class="eyebrow">Midterm · ${fmt("2026-10-12",true)}</span><h2>Weeks 1–6</h2><p>40 multiple-choice questions (1 point each) and 4 analytical questions (15 points each). 20% of your grade. Time and room: see the Canvas announcement.</p><div class="row"><a class="btn" href="${LINKS.midterm}" target="_blank" rel="noopener">Midterm study page ↗</a></div><p class="small muted">The study page has readings, flashcards, a practice quiz, common mistakes and an answer planner.</p></div>
+     <div class="panel stack"><span class="eyebrow">Final exam · Dec 14–19</span><h2>Cumulative</h2><p>Multiple choice and short essay. Emphasis: theories, concepts, evaluating evidence, research design, and applying frameworks to new scenarios. 25% of your grade. The Registrar sets the date.</p><div class="row"><button class="btn" type="button" data-et-go="synth">Synthesis prompts</button><button class="btn ghost" type="button" data-et-go="plan">Make a plan</button></div></div>
+    </div>
+    <div class="panel stack"><span class="eyebrow">What the final rewards</span><div class="grid g3">
+     <div><b>Concepts</b><p class="small muted">Define and distinguish: linked fate vs. group consciousness; descriptive vs. substantive representation.</p></div>
+     <div><b>Evidence</b><p class="small muted">Say what a design can and cannot show: experiment, survey, matching, case study.</p></div>
+     <div><b>Application</b><p class="small muted">Use a reading on a new case and say what evidence would change your mind.</p></div></div></div>`;
+  } else if(examTab==="flash"){
+    let i=0, flipped=false, list=GLOSSARY.slice();
+    b.innerHTML=`<div class="stack"><div class="row"><label class="f" style="flex-direction:row;align-items:center;gap:8px">Week <select id="fWeek"><option value="">All weeks</option>${TEACH.map(w=>`<option value="${w.id}">${esc(w.n)}</option>`).join("")}</select></label><span class="mono muted" id="fCount"></span></div>
+     <div class="flash" id="flash" tabindex="0" role="button" aria-live="polite"></div>
+     <div class="row"><button class="btn ghost" type="button" id="fPrev">‹ Previous</button><button class="btn" type="button" id="fFlip">Show definition</button><button class="btn ghost" type="button" id="fNext">Next ›</button><button class="btn ghost" type="button" id="fShuf">Shuffle</button></div>
+     <details class="box"><summary>Glossary (all terms, searchable)</summary><div><input type="search" id="gq" placeholder="Search terms" aria-label="Search glossary" style="width:100%;margin-bottom:10px"><div id="glist"></div></div></details></div>`;
+    const draw=()=>{const c=list[i]; $("#fCount").textContent=list.length?(i+1)+" / "+list.length:"0"; $("#flash").innerHTML=c?`<span class="eyebrow">${esc(wById(c[2]).n)}</span><div class="term">${esc(c[0])}</div>${flipped?`<p class="def">${esc(c[1])}</p>`:`<p class="small muted">Say the definition out loud, then flip.</p>`}`:"No cards"; $("#fFlip").textContent=flipped?"Hide definition":"Show definition"};
+    const flip=()=>{flipped=!flipped; draw()};
+    $("#flash").onclick=flip; $("#flash").onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flip()}};
+    $("#fFlip").onclick=flip; $("#fNext").onclick=()=>{i=(i+1)%list.length; flipped=false; draw()}; $("#fPrev").onclick=()=>{i=(i-1+list.length)%list.length; flipped=false; draw()};
+    $("#fShuf").onclick=()=>{list.sort(()=>Math.random()-.5); i=0; flipped=false; draw()};
+    $("#fWeek").onchange=e=>{const v=e.target.value; list=GLOSSARY.filter(g=>!v||g[2]===v); i=0; flipped=false; draw()};
+    const gl=q=>{$("#glist").innerHTML=GLOSSARY.filter(g=>!q||(g[0]+g[1]).toLowerCase().includes(q.toLowerCase())).map(g=>`<p style="margin-bottom:8px"><b>${esc(g[0])}</b> <a class="small" href="#${g[2]}">${esc(wById(g[2]).n)}</a><br><span class="small">${esc(g[1])}</span></p>`).join("")||'<p class="muted">No match.</p>'};
+    $("#gq").oninput=e=>gl(e.target.value); gl(""); draw();
+  } else if(examTab==="design"){
+    let qs=DESIGN_Q.map(q=>{const opts=[q[1],...DESIGNS.filter(d=>d!==q[1]).sort(()=>Math.random()-.5).slice(0,3)].sort(()=>Math.random()-.5); return {r:q[0],a:q[1],opts}});
+    let score=0, answered=0;
+    b.innerHTML=`<div class="stack"><p class="muted">Which design does each reading use? The design tells you what kind of claim the reading can support. <a href="#methods">Methods toolbox →</a></p><p class="mono" id="dScore">0 / ${qs.length}</p><div class="grid g2" id="dList">${qs.map((q,k)=>`<div class="panel" data-k="${k}"><b>${esc(q.r)}</b>${q.opts.map(o=>`<button type="button" class="opt" data-o="${esc(o)}">${esc(o)}</button>`).join("")}<p class="feedback" aria-live="polite"></p></div>`).join("")}</div></div>`;
+    b.querySelectorAll("#dList .panel").forEach(p=>{const q=qs[+p.dataset.k]; p.querySelectorAll(".opt").forEach(btn=>btn.onclick=()=>{
+      if(p.dataset.done) return; p.dataset.done=1; answered++; const ok=btn.dataset.o===q.a; if(ok) score++;
+      p.querySelectorAll(".opt").forEach(x=>{x.disabled=true; if(x.dataset.o===q.a) x.classList.add("right")}); if(!ok) btn.classList.add("wrong");
+      const m=METHODS.find(m=>m.name.split(" ")[0]===q.a.split(" ")[0]);
+      p.querySelector(".feedback").innerHTML=(ok?"<b>Right.</b> ":"<b>Not quite.</b> ")+(m?`Supports: ${esc(m.claim)}`:"");
+      $("#dScore").textContent=score+" / "+qs.length+(answered===qs.length?" · done":"");
+    })});
+  } else if(examTab==="mist"){
+    b.innerHTML=`<div class="stack"><p class="muted">Some older slides contained errors that were corrected in October. If you studied an older version, test yourself here.</p><div class="grid g2">${MISTAKES.map((m,k)=>`<div class="mistake" data-k="${k}"><span class="eyebrow">${esc(wById(m[3]).n)}</span><p class="claim">“${esc(m[0])}”</p><div class="row"><button type="button" class="btn ghost" data-ans="1">Right</button><button type="button" class="btn ghost" data-ans="0">Wrong</button></div><p class="feedback" aria-live="polite"></p></div>`).join("")}</div></div>`;
+    b.querySelectorAll(".mistake").forEach(el=>{const m=MISTAKES[+el.dataset.k]; el.querySelectorAll("[data-ans]").forEach(btn=>btn.onclick=()=>{
+      const ok=(btn.dataset.ans==="1")===m[1]; el.querySelectorAll("[data-ans]").forEach(x=>x.disabled=true);
+      el.querySelector(".feedback").innerHTML=`<span class="verdict ${ok?"r":"w"}">${ok?"You got it.":"Not quite."}</span> The statement is <b>${m[1]?"right":"wrong"}</b>. ${esc(m[2])}`;
+    })});
+  } else if(examTab==="synth"){
+    b.innerHTML=`<div class="stack"><p class="muted">Cross-week prompts for the cumulative final. Practice only. Plan an answer in four moves: claim, evidence from two readings with authors, a limit of that evidence, and what would change your mind.</p>${SYNTH.map(([t,p,ws],k)=>`<details class="box"><summary>${esc(t)}</summary><div class="stack"><p>${esc(p)}</p><p class="small">Weeks: ${ws.map(x=>`<a href="#${x}">${esc(wById(x).n)}</a>`).join(", ")}</p><label class="f">Your outline (saved in this browser)<textarea id="syn-${k}" rows="4" style="font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:8px">${esc((S.syn||{})[k]||"")}</textarea></label></div></details>`).join("")}</div>`;
+    b.querySelectorAll("textarea").forEach(t=>t.oninput=()=>{S.syn=S.syn||{}; S.syn[t.id.slice(4)]=t.value; save()});
+  } else if(examTab==="plan"){
+    b.innerHTML=`<div class="stack"><p class="muted">The Registrar sets the final exam date in exam week (Dec 14–19). Enter it to get a 14-day review plan, one session per day, ending with synthesis and mistakes.</p>
+     <label class="f" style="max-width:16rem">Final exam date<input type="date" id="fd" min="2026-12-14" max="2026-12-19" value="${S.finalDate}"></label><div id="planOut"></div></div>`;
+    const draw=()=>{const v=$("#fd").value; if(!v){$("#planOut").innerHTML=""; return} S.finalDate=v; save();
+      const units=[...TEACH.map(w=>[w.n+": "+w.title.split(":")[0],"#"+w.id]),["Synthesis prompts + methods toolbox","#methods"],["Right-or-wrong + flashcards, then rest","#exam"]];
+      const end=pd(v); const rows=units.map((u,k)=>{const d=new Date(end); d.setDate(end.getDate()-(units.length-k)); return `<tr><td class="mono num">${DAYS[d.getDay()]} ${MONTHS[d.getMonth()]} ${d.getDate()}</td><td><a href="${u[1]}">${esc(u[0])}</a></td></tr>`});
+      $("#planOut").innerHTML=`<div class="tablewrap panel"><table class="t"><thead><tr><th>Day</th><th>Review</th></tr></thead><tbody>${rows.join("")}</tbody></table></div><p class="small muted">Each day: read the week's findings, answer its "Check yourself" questions from memory, then check.</p>`};
+    $("#fd").onchange=draw; draw();
+  }
+  document.querySelectorAll("[data-et-go]").forEach(x=>x.onclick=()=>{examTab=x.dataset.etGo; render()});
+}
+views.methods=()=>`<section class="view">
+  <div class="stack"><span class="eyebrow">Methods toolbox</span><h1>What can each design prove?</h1><p class="lede">Every reading uses a research design. The design decides the strongest claim the authors can make. Use this page with any reading.</p></div>
+  <div class="panel stack"><span class="eyebrow">Six steps for reading any empirical article</span>
+   <ol class="qlist"><li><b>Question.</b> What puzzle does it answer?</li><li><b>Theory and hypotheses.</b> What should happen, and why?</li><li><b>Design and method.</b> Experiment, survey, case, review?</li><li><b>Data and measures.</b> Who, when, and how is each concept measured?</li><li><b>Findings.</b> What did they find, and how big is it?</li><li><b>Limits and critiques.</b> What can't this design show?</li></ol>
+   <p class="small muted">Tip from the syllabus: read the abstract and conclusion first, then the introduction.</p></div>
+  <div class="tablewrap panel"><table class="t"><thead><tr><th>Design</th><th>Strongest claim</th><th>Watch for</th><th>Course readings</th></tr></thead><tbody>
+   ${METHODS.map(m=>`<tr><td><b>${esc(m.name)}</b></td><td>${esc(m.claim)}</td><td class="muted">${esc(m.watch)}</td><td class="small">${m.ex.map(([r,w])=>`<a href="#${w}">${esc(r)}</a>`).join("<br>")}</td></tr>`).join("")}
+  </tbody></table></div>
+  <div class="panel stack"><span class="eyebrow">Four kinds of validity (DeSante & Smith, n. 1)</span>
+   <div class="grid g4"><div><b>Face</b><p class="small muted">The questions look like the concept.</p></div><div><b>Convergent</b><p class="small muted">It moves with similar measures.</p></div><div><b>Predictive</b><p class="small muted">It predicts what it should.</p></div><div><b>Discriminant</b><p class="small muted">It doesn't predict what it shouldn't.</p></div></div></div>
+  <div class="panel stack"><span class="eyebrow">Careful wording</span>
+   <div class="tablewrap"><table class="t"><thead><tr><th>Design</th><th>Say</th><th>Don't say</th></tr></thead><tbody>
+    <tr><td>Experiment</td><td>"The treatment caused…, in this sample."</td><td>"…for all Americans, in every election."</td></tr>
+    <tr><td>Observational survey</td><td>"X is associated with Y, net of controls."</td><td>"X causes Y."</td></tr>
+    <tr><td>Case study</td><td>"In this case, the mechanism worked like…"</td><td>"This always happens."</td></tr></tbody></table></div></div>
+ </section>`;
+views.assignments=()=>`<section class="view">
+  <div class="stack"><span class="eyebrow">Assignments & grading</span><h1>What counts, and when</h1></div>
+  <div class="twocol">
+   <div class="panel stack"><span class="eyebrow">Grade what-if calculator</span><p class="small muted">Enter scores out of 100 to see a weighted total. Leave a box empty to skip it. This is an estimate; Canvas is the official record and absence penalties are not included.</p>
+    <div class="tablewrap"><table class="t"><thead><tr><th>Component</th><th>Weight</th><th>Score</th></tr></thead><tbody>
+     ${[["part","Participation & workshops",20],["obs","Election observation report",10],["mid","Midterm exam",20],["proj","Final research project",25],["fin","Final exam",25]].map(([k,l,w])=>`<tr><td>${l}</td><td class="num">${w}%</td><td><input type="number" min="0" max="100" step="1" id="g-${k}" data-w="${w}" aria-label="${l} score" value="${(S.grades||{})[k]??""}"></td></tr>`).join("")}
+    </tbody></table></div>
+    <div class="row" style="justify-content:space-between"><span class="muted" id="gNote">Weighted total of entered parts</span><span class="big" id="gOut">–</span></div></div>
+   <div class="stack">
+    <div class="panel stack"><span class="eyebrow">Due dates</span>
+     <div class="timeline">
+      <div class="tl"><div class="d">Mon Oct 12</div><div>Midterm exam (20%)</div></div>
+      <div class="tl"><div class="d">Tue Nov 3</div><div>Election Day: observe a polling place</div></div>
+      <div class="tl"><div class="d">Mon Nov 9</div><div>Election observation report, 11:59 pm (10%)</div></div>
+      <div class="tl"><div class="d">Mon Dec 14</div><div>Final research project, 11:59 pm (25%)</div></div>
+      <div class="tl"><div class="d">Dec 14–19</div><div>Final exam (25%), date set by the Registrar</div></div></div></div>
+    <div class="panel stack"><span class="eyebrow">Late work</span><p class="small">Exams must be taken at the scheduled time unless there is a documented emergency. The observation report loses 5% per day late. The final project loses 5% per day late, up to 3 days; after that it receives 0.</p></div>
+   </div>
+  </div>
+  <div class="panel stack"><span class="eyebrow">Election observation report · 2 pages · due Nov 9</span>
+   <p>Visit a polling place in a minority-majority precinct on Tuesday, Nov 3. Connect what you see to White, Nathan & Faller and to Ray, Herd & Moynihan.</p>
+   <div class="grid g2"><div><b>Observe and note</b><ul class="qlist small"><li>Wait times (note the time you arrive and how the line moves)</li><li>Language assistance: signs, materials, interpreters</li><li>Accessibility for voters with disabilities</li><li>How officials and voters interact</li><li>Which costs from the burden framework you see: learning, compliance, psychological</li></ul></div>
+   <div><b>Be a good observer</b><ul class="qlist small"><li>Follow election officials' instructions and local rules about where observers can stand.</li><li>Don't interfere with voters, talk about candidates, or photograph voters or ballots.</li><li>Write notes right after, with times.</li></ul></div></div></div>
+  <div class="panel stack"><span class="eyebrow">Final research project · 25% · due Dec 14</span><p class="muted small">Choose one option. Answer three quick questions for a suggestion, then read the full option on Canvas.</p>
+   <div class="grid g3">
+    <label class="f">Do you enjoy working with data?<select id="pq1"><option value="">Choose</option><option value="y">Yes</option><option value="n">Not really</option></select></label>
+    <label class="f">Which interests you most?<select id="pq2"><option value="">Choose</option><option value="concept">How a concept is measured</option><option value="gov">How a real government procedure works</option><option value="elect">The 2024 election</option><option value="own">My own question</option></select></label>
+    <label class="f">Do you want to present a poster?<select id="pq3"><option value="">Choose</option><option value="y">Yes</option><option value="n">No</option></select></label></div>
+   <div id="pOut"></div>
+   <div class="grid g3" id="pOpts">${[
+    ["1","Concept-and-measurement memo","8–10 pages","Define linked fate, group consciousness or intersectionality; evaluate a published measure; recommend improvements."],
+    ["2","Replication workshop","8–10 pages + appendix","Reproduce one table or figure with ANES, CES or CMPS data; explain what it does and does not prove."],
+    ["3","Administrative equity audit","8–10 pages","Examine a real procedure's learning, compliance and psychological costs; propose lawful, feasible fixes. Connect to Ray et al. and Park & Favero."],
+    ["4","2024 election evidence brief","8–10 pages","Reconcile competing claims with validated-voter, survey and electoral data; separate turnout, switching and composition."],
+    ["5","Original research project","10–12 pages + poster","Question, theory, 8+ peer-reviewed sources (5 from the syllabus), data plan and ethics statement, analysis; poster in Week 18."]
+   ].map(([n,t,l,d])=>`<div class="ws" data-opt="${n}"><span class="eyebrow">Option ${n} · ${l}</span><h3>${t}</h3><p class="small muted">${d}</p></div>`).join("")}</div>
+   <p class="small muted">AI tools: brainstorming, grammar and outlines are allowed; having AI write or analyze for you is not. If you use AI for an allowed task, add the syllabus statement: "I used [tool name] to [specific task]. I verify all analysis and arguments are my own."</p></div>
+ </section>`;
+function wireAssignments(){
+  const calc=()=>{let tw=0,tot=0; S.grades=S.grades||{};
+    document.querySelectorAll("[id^=g-]").forEach(i=>{const k=i.id.slice(2); const v=i.value===""?null:Math.max(0,Math.min(100,+i.value)); S.grades[k]=i.value===""?"":v; if(v!==null&&!isNaN(v)){tw+=+i.dataset.w; tot+=v*(+i.dataset.w)}});
+    save(); $("#gOut").textContent=tw?(tot/tw).toFixed(1):"–"; $("#gNote").textContent=tw?`Average over ${tw}% of the grade entered`:"Weighted total of entered parts"};
+  document.querySelectorAll("[id^=g-]").forEach(i=>i.oninput=calc); calc();
+  const pick=()=>{const a=$("#pq1").value,b=$("#pq2").value,c=$("#pq3").value; document.querySelectorAll("[data-opt]").forEach(x=>x.style.borderColor="");
+    if(!b){$("#pOut").innerHTML=""; return}
+    let o=b==="concept"?"1":b==="gov"?"3":b==="elect"?"4":"5"; if(a==="y"&&b==="concept") o="2"; if(c==="y") o="5";
+    const el=document.querySelector(`[data-opt="${o}"]`); el.style.borderColor="var(--accent)";
+    $("#pOut").innerHTML=`<p class="note">Suggestion: <b>Option ${o}</b>, highlighted below. ${o==="5"?"Option 5 is the one with a poster.":""} A suggestion only; talk it through in office hours.</p>`};
+  ["#pq1","#pq2","#pq3"].forEach(s=>$(s).onchange=pick);
+}
+views.support=()=>`<section class="view">
+  <div class="stack"><span class="eyebrow">Support</span><h1>Help, norms and resources</h1></div>
+  <div class="grid g2">
+   <div class="panel stack"><span class="eyebrow">Your instructor</span><p><b>Instructor Name</b></p><p class="small">Office hours: Day and time, Building Room.</p><p class="small">Email: <span class="mono" id="em">instructor@university.edu</span> <button class="iconbtn" type="button" id="copyEm">Copy</button></p><p class="small muted">Office-hours conversations count toward participation.</p></div>
+   <div class="panel stack"><span class="eyebrow">Attendance</span><p class="small">Two free absences. A 3rd costs 5% of the final grade, a 4th 10%; 5 or more means failing the course unless there is a documented emergency. If you must miss class, email before class and complete the alternate assignment on Canvas. Workshop participation can't be made up, but the penalty can be avoided.</p></div>
+   <div class="panel stack"><span class="eyebrow">Ways to participate if you're quiet</span><ul class="qlist small"><li>Contribute on Canvas discussion boards for alternate credit.</li><li>Some workshops allow a written reflection instead of speaking.</li><li>Office-hours discussions count.</li><li>Rotate roles in group work: not always leading, not always silent.</li></ul></div>
+   <div class="panel stack"><span class="eyebrow">How we discuss hard topics</span><ul class="qlist small"><li>Challenge ideas, not people.</li><li>People in the room have different lived experiences.</li><li>No "devil's advocate" arguments that ask classmates to defend their humanity.</li><li>If a discussion is difficult, you may step out without penalty, or contact your instructor about alternate participation.</li><li>If you feel unsafe or disrespected, tell your instructor right away.</li></ul></div>
+  </div>
+  <div class="grid g3">
+   <div class="panel stack"><span class="eyebrow">Wellbeing</span><p class="small">Counseling Center: MGC 214, <span class="mono">202-885-3500</span><br>Center for Diversity & Inclusion: <span class="mono">cdi@american.edu</span><br>Dean of Students Office: <span class="mono">202-885-3300</span></p></div>
+   <div class="panel stack"><span class="eyebrow">Accessibility</span><p class="small">Register with the Academic Support and Access Center (ASAC); all accommodations are honored. On this page, use <b>Display</b> (top right) for larger text, wider spacing, dark mode, or less motion.</p></div>
+   <div class="panel stack"><span class="eyebrow">Academic support</span><p class="small">Writing Center: Battelle 228<br>Quantitative Research Lab (CTRL+Q): data projects<br>Library research consultations: <span class="mono">aulib@american.edu</span></p></div>
+  </div>
+  <div class="panel stack"><span class="eyebrow">Reading tips (from the syllabus)</span><ol class="qlist small"><li>Don't read in order: abstract, conclusion, then introduction.</li><li>Focus on the argument and its evidence, not every detail.</li><li>Annotate as you go.</li><li>Ask how the reading will feed Monday's workshop.</li><li>Bring questions; confusion is normal with academic writing. Your instructor can suggest lower-level supplementary readings.</li></ol></div>
+  <p class="small muted">Policies here summarize the syllabus. The syllabus and Canvas announcements govern.</p>
+ </section>`;
+
+/* ===================== ROUTER ===================== */
+function render(){
+  const h=(location.hash||"#home").slice(1);
+  const w=WEEKS.find(x=>x.id===h&&!x.special);
+  const key=w?"weeks":(views[h]?h:"home");
+  document.querySelectorAll("nav.tabs a").forEach(a=>a.setAttribute("aria-current",a.getAttribute("href")==="#"+key?"page":"false"));
+  $("#main").innerHTML=w?weekView(w):views[key]();
+  if(key==="map") drawMap();
+  if(key==="exam"){examBody(); document.querySelectorAll("[data-et]").forEach(x=>x.onclick=()=>{examTab=x.dataset.et; document.querySelectorAll("[data-et]").forEach(y=>y.setAttribute("aria-selected",y===x)); examBody()})}
+  if(key==="assignments") wireAssignments();
+  if(key==="support"){const c=$("#copyEm"); c.onclick=()=>{const t=$("#em").textContent; (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{c.textContent="Copied"}).catch(()=>{const r=document.createRange(); r.selectNodeContents($("#em")); const s=getSelection(); s.removeAllRanges(); s.addRange(r); c.textContent="Selected"})}}
+  document.querySelectorAll("[data-persona]").forEach(b=>b.onclick=()=>{S.persona=S.persona===b.dataset.persona?null:b.dataset.persona; save(); render()});
+  document.querySelectorAll("[data-done]").forEach(c=>c.onchange=()=>{S.done[c.dataset.done]=c.checked; save()});
+  document.querySelectorAll("[data-pdf]").forEach(b=>b.onclick=()=>openViewer(b.dataset.pdf,b.dataset.title));
+}
+window.addEventListener("hashchange",()=>{render(); window.scrollTo(0,0)});
+
+/* ===================== SETTINGS ===================== */
+function applySettings(){
+  const r=document.documentElement, s=S.settings;
+  if(s.theme==="system") r.removeAttribute("data-theme"); else r.setAttribute("data-theme",s.theme);
+  r.style.setProperty("--scale",s.scale); r.classList.toggle("readable",s.readable==="1"); r.classList.toggle("calm",s.calm==="1");
+  document.querySelectorAll(".seg-ctl").forEach(g=>g.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(s[g.dataset.set]===b.dataset.v))));
+}
+document.querySelectorAll(".seg-ctl").forEach(g=>g.querySelectorAll("button").forEach(b=>b.onclick=()=>{S.settings[g.dataset.set]=b.dataset.v; save(); applySettings()}));
+$("#settingsBtn").onclick=()=>{const p=$("#settingsPanel"); p.hidden=!p.hidden; $("#settingsBtn").setAttribute("aria-expanded",String(!p.hidden))};
+
+/* ===================== PDF VIEWER (PDF.js, loaded on first use) ===================== */
+let pdfLib=null, doc=null, page=1;
+function loadScript(src){return new Promise((ok,no)=>{const s=document.createElement("script"); s.src=src; s.onload=ok; s.onerror=no; document.head.appendChild(s)})}
+async function ensurePdf(){
+  if(pdfLib) return pdfLib;
+  await loadScript("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js");
+  await loadScript("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js");
+  pdfLib=window.pdfjsLib; return pdfLib;
+}
+async function renderPage(){
+  const st=$("#vStage"); if(!doc) return;
+  const pg=await doc.getPage(page); const w=Math.min(st.clientWidth-24, 1100);
+  const vp1=pg.getViewport({scale:1}); const scale=w/vp1.width; const dpr=window.devicePixelRatio||1;
+  const vp=pg.getViewport({scale:scale*dpr}); const c=document.createElement("canvas"); c.width=vp.width; c.height=vp.height; c.style.width=(vp.width/dpr)+"px";
+  c.setAttribute("aria-label","Slide "+page+" of "+doc.numPages);
+  await pg.render({canvasContext:c.getContext("2d"), viewport:vp}).promise;
+  st.innerHTML=""; st.appendChild(c); $("#vPage").textContent=page+" / "+doc.numPages;
+  $("#vPrev").disabled=page<=1; $("#vNext").disabled=page>=doc.numPages;
+}
+async function openViewer(file,title){
+  const dlg=$("#viewer"); $("#vTitle").textContent=title; $("#vOpen").href="pdfs/"+file; $("#vStage").innerHTML='<p class="vmsg">Loading slides…</p>'; $("#vPage").textContent="–";
+  if(dlg.showModal) dlg.showModal(); else dlg.setAttribute("open","");
+  try{ const lib=await ensurePdf(); doc=await lib.getDocument("pdfs/"+file).promise; page=1; await renderPage(); }
+  catch(e){ $("#vStage").innerHTML='<p class="vmsg">The viewer could not load these slides here. Use "Open PDF" above instead.</p>'; }
+}
+$("#vPrev").onclick=()=>{if(page>1){page--; renderPage()}}; $("#vNext").onclick=()=>{if(doc&&page<doc.numPages){page++; renderPage()}};
+$("#vClose").onclick=()=>{$("#viewer").close(); doc=null};
+$("#viewer").addEventListener("keydown",e=>{if(e.key==="ArrowRight") $("#vNext").click(); if(e.key==="ArrowLeft") $("#vPrev").click()});
+$("#viewer").addEventListener("close",()=>{doc=null});
+
+applySettings(); render();
+</script>
