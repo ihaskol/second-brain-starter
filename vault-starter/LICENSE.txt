@@ -1,15 +1,3 @@
-Copyright (c) 2026 Isa Haskologlu, PhD
-
-This work (the guides in guides/ and the vault-starter files) is licensed under the
-Creative Commons Attribution 4.0 International License (CC BY 4.0).
-https://creativecommons.org/licenses/by/4.0/
-
-When you share or adapt it, give appropriate credit (for example:
-"Based on The Second Brain by Isa Haskologlu, PhD, CC BY 4.0"), link to the
-license, and indicate if you made changes.
-
-The full legal text follows.
-
 Attribution 4.0 International
 
 =======================================================================
