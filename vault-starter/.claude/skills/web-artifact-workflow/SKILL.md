@@ -13,6 +13,7 @@ A seven-step pass that every interactive page in this vault goes through before 
 
 Use it together with:
 - the built-in `artifact-design` guidance (page contract, theming, layout) and `dataviz` (any chart);
+- `ux-redesign` when the page needs simplifying or restructuring, not just polishing (first-time-visitor audit, information architecture, progressive disclosure, affordances); it runs inside steps 1–3 below;
 - the domain builder, if there is one: `course-hub-builder` (whole-course pages), `00-System/WORKSHOP-DESIGN-STANDARD.md` (in-class workshops), `presentation-builder` (decks; not web pages).
 
 `RESEARCH_PROTOCOL.md` still governs every fact on the page.

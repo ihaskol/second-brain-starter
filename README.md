@@ -43,7 +43,7 @@ vault-starter/
 │   ├── Config/               # source-pipeline.yml, zotero-integration.yml
 │   └── Zotero/README.md
 ├── .claude/skills/           # citation-verification, course-hub-builder, presentation-builder,
-│                             # process-sources, research-ideation, web-artifact-workflow, zotero-sources
+│                             # process-sources, research-ideation, ux-redesign, web-artifact-workflow, zotero-sources
 ├── .agents/skills/           # Codex copies of process-sources, zotero-sources
 ├── 04-Templates/             # Sablon-*.md note templates (Turkish names) + two English templates
 │                             # (software project kickoff, user interview)
@@ -78,6 +78,7 @@ vault-starter/
 
 ## Notes
 
+- `ux-redesign` is a UI/UX method for making an interactive page simple and user-friendly: a first-time-visitor audit, few views, essentials first, short version first with "Go deeper", plain language, clickable affordances. It includes tested code patterns and `scripts/link_check.js` (needs Node.js and `playwright-core`). Use it together with `web-artifact-workflow`.
 - `course-hub-builder` builds one interactive page for a whole course. Its template (`assets/course-hub-template.html`) is a real worked example (a Fall 2026 politics course). The instructor's contact details and private page links have been replaced with placeholders; swap in your own course data before use.
 
 - `AGENTS.md` is the same manual as `CLAUDE.md` for Codex and other agents. If you edit one, mirror the change in the other.

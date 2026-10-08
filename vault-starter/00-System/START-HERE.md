@@ -119,6 +119,7 @@ Deliverable standards for every project (English only, Times New Roman, visuals 
 - `forecast_bakeoff.py` — `bakeoff(series, horizon, n_origins)`: seasonal-naive / ETS / ARIMA / Theta / Croston / ensemble through one rolling-origin backtest, returns the winner + forecast
 - Full-featured decks: use the registered **`presentation-builder`** skill (`.claude/skills/presentation-builder/`)
 - Tool pitfalls learned the hard way (Keynote, Pages, pandoc, web fetches, artifacts): `00-System/LESSONS-LEARNED.md`
+- A page that feels confusing, cluttered or unfriendly (simplify, redesign, first-time-visitor review, UI/UX): use the **`ux-redesign`** skill (`.claude/skills/ux-redesign/`), then finish with `web-artifact-workflow`
 - Any interactive page or artifact (audit, polish, launch): follow the **`web-artifact-workflow`** skill (`.claude/skills/web-artifact-workflow/`), including its accessibility audit script
 - Whole-course interactive student page (course map, week pages with slides, workshops, exam prep): use the **`course-hub-builder`** skill (`.claude/skills/course-hub-builder/`)
 - In-class group workshops: follow `00-System/WORKSHOP-DESIGN-STANDARD.md` (interactive HTML + Word + Excel from one config; team codes; class comparison; `#instructor` keys)
