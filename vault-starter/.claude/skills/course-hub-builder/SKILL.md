@@ -11,7 +11,7 @@ disable-model-invocation: false
 
 Turn a course project's existing, verified materials into **one interactive page** that students use all semester: a course map, a page per class, slides they can read in the browser, workshop links, exam prep and support. The page *links and organizes* what already exists. It adds study tools, but no new unverified facts.
 
-The reference build is a real course hub (GOVT 325, Fall 2026). `assets/course-hub-template.html` is a copy of it, with instructor details and private links replaced by placeholders. Start from that template and replace the data block; don't redesign from scratch.
+The template, `assets/course-hub-template.html`, is a neutral example: a fictional course ("EX 101 · Evidence and Public Policy") built from a real course hub, with every course-specific value replaced by a [bracketed] placeholder. Start from that template and replace the data block, the dates and the placeholders; don't redesign from scratch. Placeholders are not content: fill each one from your own verified materials.
 
 ## Governing rules (read first)
 
@@ -64,12 +64,12 @@ Single HTML file with a hash router. Tabs: **Start · Course map · Weeks · Wor
 - **Support:** instructor contact (address as selectable text plus a copy button; no mailto), attendance, alternate participation, discussion norms, wellbeing, accessibility, and academic resources, all from the syllabus.
 - **Display settings:** theme (system/light/dark), text size, wider spacing, reduce motion.
 
-## Technical rules (learned in the GOVT 325 build)
+## Technical rules (learned in the first real build)
 
 - Artifact page contract: tokens on `:root` with both dark blocks; body background from a token; 16px gutter; no horizontal scroll at 390px; `<meta charset="utf-8">` at the top (local test servers otherwise garble the characters).
 - **Privacy:** progress, outlines, calculator entries and settings go in `localStorage` only, wrapped in try/catch. Say so on the page. Collect nothing.
 - **PDF viewer:** lazy-load PDF.js 3.11.174 from cdnjs. Load `pdf.worker.min.js` as a `<script>` **before** `pdf.min.js`, so it runs as a main-thread fake worker; cross-origin workers are blocked. Then `getDocument("pdfs/<file>")`. Publish PDFs as supporting `files` under `pdfs/`.
-- **Charts:** load the `dataviz` skill first. Use thin horizontal bars with direct value labels, a legend when there are 2 or more series, a source line, and text in ink tokens. Run `validate_palette.js` for light **and** dark. The GOVT 325 values that pass are light `#00806a,#a8720a,#2f62b0` and dark `#2fa88d,#b88a28,#5f8fd6`. Bars must be proportional: put the bar inside a wrapper track and the value label in its own grid column. Never subtract a fixed width from the bar.
+- **Charts:** load the `dataviz` skill first. Use thin horizontal bars with direct value labels, a legend when there are 2 or more series, a source line, and text in ink tokens. Run `validate_palette.js` for light **and** dark. The values that passed in the first build are light `#00806a,#a8720a,#2f62b0` and dark `#2fa88d,#b88a28,#5f8fd6`. Bars must be proportional: put the bar inside a wrapper track and the value label in its own grid column. Never subtract a fixed width from the bar.
 - **Links** to workshops and other artifacts open in a new tab; they stay private until the owner shares them. Say so on the page and in the report.
 
 ## Slide PDFs (Keynote export, safely)

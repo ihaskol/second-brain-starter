@@ -8,7 +8,7 @@ scope: vault-wide (any project that builds in-class group workshops)
 
 # Workshop Design Standard
 
-This is the general logic for in-class group workshops built in this vault. It comes from a redistricting simulator built for a university politics course (2026-10-04/05), which the user singled out as the model, and from its generalisation to all other GOVT 325 workshops on 2026-10-06. It sits under `RESEARCH_PROTOCOL.md`: every fact, figure, and quotation in a workshop follows the same evidence rules as any other deliverable.
+This is the general logic for in-class group workshops built in this vault. It comes from a redistricting simulator built for a university politics course (2026-10-04/05), which the user singled out as the model, and from its generalisation to all the other workshops in that course on 2026-10-06. It sits under `RESEARCH_PROTOCOL.md`: every fact, figure, and quotation in a workshop follows the same evidence rules as any other deliverable.
 
 ## 1. What a workshop is for
 
