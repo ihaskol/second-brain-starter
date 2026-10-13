@@ -2,7 +2,7 @@
 
 A shareable copy of the Second Brain setup: the system files (the "engine") plus the setup guides. It contains **no research content and no credentials**.
 
-Prepared by Isa Haskologlu, PhD. Packaged 2026-10-06; Guide 11 (pipeline tools) added the same day.
+Prepared by Isa Haskologlu, PhD. Packaged 2026-10-06; the pipeline-tools guide added the same day; guides renumbered in setup order on 2026-10-13.
 
 **License:** © 2026 Isa Haskologlu, PhD. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) (full text in `LICENSE.txt`). You may share and adapt everything here for any purpose, as long as you give credit, link to the license and say what you changed. Suggested credit: *"Based on The Second Brain by Isa Haskologlu, PhD, CC BY 4.0."* Citation details: `CITATION.cff`, or the "How to cite this" box on the hub page.
 
@@ -14,7 +14,7 @@ Prepared by Isa Haskologlu, PhD. Packaged 2026-10-06; Guide 11 (pipeline tools) 
 
 | File | What it is |
 |---|---|
-| `Integration-Setup-Guides.pdf` / `.docx` | Step-by-step setup for every integration (Claude Code, Zotero, NotebookLM, Jev, …), plus Guide 11: the PDF, OCR and Word/PDF tools the scripts need |
+| `Integration-Setup-Guides.pdf` / `.docx` | Step-by-step setup for every integration (Claude Code, Zotero, NotebookLM, Jev, …), plus Guide 3: the PDF, OCR and Word/PDF tools the scripts need |
 | `integration-quick-reference.pdf` / `.png` | One-page cheat sheet of the same steps |
 | `Second-Brain-Guide.pdf` / `.docx` | How the system works and why (pipeline, memory, verification) |
 | `second-brain-infographic.pdf` / `.png` | One-page visual overview |
@@ -56,13 +56,13 @@ vault-starter/
 
 ## Quick start
 
-**Which guides you need:** everyone does Guides 0–2 (Claude Code, Obsidian, Git). Do Guide 11 before your first PDF. Guides 3–4 are for Zotero users. The rest are optional. You need a paid Claude plan; Jev also needs a TypeSafe account.
+**Which guides you need:** everyone does Guides 0–2 (Claude Code, Obsidian, Git). Do Guide 3 before your first PDF. Guides 9–10 are for Zotero users. The rest are optional. You need a paid Claude plan; Jev also needs a TypeSafe account.
 
 1. Copy `vault-starter/` to where you want your vault, rename it (e.g. `Second Brain`), and open it in Obsidian. The folders already exist, so skip the folder-creation step in Guide 1.
 2. Follow Guide 0 in `guides/Integration-Setup-Guides.pdf` to install Claude Code.
-3. Follow **Guide 11** to install the pipeline tools: Homebrew, poppler, OCRmyPDF/Tesseract (plus language packs), qpdf, Python with the packages in `00-System/requirements.txt` (in a `.venv` inside the vault, already git-ignored), and pandoc. It ends with `process-source.py --doctor`, which must report "All dependencies available".
+3. Follow **Guide 3** to install the pipeline tools: Homebrew, poppler, OCRmyPDF/Tesseract (plus language packs), qpdf, Python with the packages in `00-System/requirements.txt` (in a `.venv` inside the vault, already git-ignored), and pandoc. It ends with `process-source.py --doctor`, which must report "All dependencies available".
 4. Run `git init` in the vault (Guide 2). `.gitignore` already covers the Zotero key file and `.venv/`.
-5. **Zotero (optional, Guides 3–4):** open `00-System/Config/zotero-integration.yml` and replace `YOUR_ZOTERO_LIBRARY_ID` with your own ID (`.venv/bin/python 00-System/Scripts/zotero_doctor.py` detects it). Replace the example `"My Collection": "My-Project"` mappings with your own, or delete them. To write notes back to Zotero, create your own API key and save it as `00-System/Config/.zotero-web-api-key`; Guide 4 shows how to enter it at a hidden prompt. Never paste it into a chat or a command line.
+5. **Zotero (optional, Guides 9–10):** open `00-System/Config/zotero-integration.yml` and replace `YOUR_ZOTERO_LIBRARY_ID` with your own ID (`.venv/bin/python 00-System/Scripts/zotero_doctor.py` detects it). Replace the example `"My Collection": "My-Project"` mappings with your own, or delete them. To write notes back to Zotero, create your own API key and save it as `00-System/Config/.zotero-web-api-key`; Guide 10 shows how to enter it at a hidden prompt. Never paste it into a chat or a command line.
 6. Add any other guides you want (Claude in Chrome, NotebookLM, Jev, …).
 7. Start Claude Code in the vault, put a PDF in `01-Library/Originals/`, and say `inspect raw`.
 8. Start your first project with the "Start a new project" prompt in `guides/PROMPTS.md`.
