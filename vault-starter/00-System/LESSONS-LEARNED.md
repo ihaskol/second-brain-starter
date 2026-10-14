@@ -40,6 +40,10 @@ Hard-won operational lessons from building in this vault. Each one cost at least
 - **Local test servers garble characters** unless the page has `<meta charset="utf-8">` (2026-10-06).
 - **Run the accessibility audit before publishing:** `.claude/skills/web-artifact-workflow/scripts/audit_page.js`. A page that passed smoke tests still had 4 violations: `lang`, contrast, nested interactive, heading order (2026-10-06).
 - **Charts:** validate the palette for light and dark with the `dataviz` script. Draw bars proportionally: the bar sits in a wrapper track and the value label in its own column (2026-10-06).
+- **Video and audio on artifacts can't seek** when played from `src`: published media have no byte-range support. Fetch the file once and play it from `URL.createObjectURL(blob)`. Python's `http.server` has the same limit, so it reproduces the bug locally (2026-10-13).
+- **Not served on artifacts:** `.vtt` and `.m4a`. Embed captions as a Blob `<track>`, and use `.mp3`, `.ogg` or `.wav` for audio (2026-10-13).
+- **A page copied alone to another computer loses its `media/` and `pdfs/` folders**, and a PDF.js viewer can't read local files from `file://`. Share the link or the whole folder, or embed small media as `data:` URIs (2026-10-13).
+- **Videos on slides:** Keynote shows the video's first frame on the slide, so start with a short cover frame. A font installed while Keynote is open is ignored until Keynote restarts (2026-10-13).
 
 ## Sources, facts and the web
 

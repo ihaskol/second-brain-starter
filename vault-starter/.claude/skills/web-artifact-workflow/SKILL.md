@@ -30,6 +30,14 @@ Use it together with:
 | 6. AUDIT | Website auditor | Run `scripts/audit_page.js` (below), then fix **every** violation; check screenshots once. Check performance: page weight; heavy libraries (PDF.js etc.) loaded only on first use. | **SEO is not applicable** to private artifacts. Don't add meta keywords, sitemaps or indexing tags. |
 | 7. LAUNCH | Final polish | Write a **launch checklist** into the project's `PROJECT-STATE.md`; republish to the same URL; record changes in `DECISIONS.md` and `log.md`. | "Deployment" = publishing an artifact plus sharing. Sharing is the owner's action; never claim it's done unless the publish result says so. |
 
+## Media and files on the artifact host (learned 2026-10-13)
+
+- Published media have **no byte-range support**. Fetch video and audio once as a Blob and play it from an object URL, or seeking won't work.
+- **Not served:** `.vtt` and `.m4a`. Embed captions as a Blob `<track>`, and use `.mp3`, `.ogg` or `.wav` for audio. The publish error lists the served types.
+- Give every video a **poster** that shows content.
+- A page copied alone to another computer loses its `media/` and `pdfs/` folders. Share the link, or embed small media as `data:` URIs when the page must travel as one file.
+- Details and code patterns: the `course-hub-builder` skill, section "Video, audio and captions".
+
 ## Step 6 in detail: the audit
 
 ```bash

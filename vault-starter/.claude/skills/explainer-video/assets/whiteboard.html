@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<style>
+@font-face{font-family:"Hand";src:url("fonts/PatrickHand-Regular.ttf") format("truetype")}
+html,body{margin:0;background:#efeee9}
+svg{display:block}
+text{font-family:"Hand",cursive}
+</style>
+<script src="vendor/rough.js"></script>
+</head><body>
+<svg id="s" width="1920" height="1080" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+ <rect width="1920" height="1080" fill="#efeee9"/>
+ <defs id="defs"></defs>
+ <g id="stage"></g>
+</svg>
+<script>
+/* Whiteboard explainer engine (explainer-video skill). 16:9, 1920x1080. build(timing) lays out every scene from
+   timing.json (scripts/narrate.py); render(t) draws the frame at time t (deterministic, fixed seeds).
+   render(t) is deterministic. Each scene fades in at its start and out before the next one. Words appear when spoken:
+   P(scene, segment, "phrase") = the moment that phrase is said (by its position in the line). */
+const INK="#2b2b2b", BLUE="#1f5fbf", RED="#c8372d", GREEN="#1e8a5a", ORANGE="#c76a1b", NAVY="#24427f", GREY="#8a8984", NS="http://www.w3.org/2000/svg";
+const svg=document.getElementById("s"), stage=document.getElementById("stage"), defs=document.getElementById("defs");
+const rc=rough.svg(svg);
+let EL=[], seed=11, T=null, SC=[], cur=0;
+const opt=(o={})=>Object.assign({seed:seed++,roughness:1.3,bowing:1.2,stroke:INK,strokeWidth:3.2},o);
+function sceneGroup(i){const g=document.createElementNS(NS,"g"); stage.appendChild(g); SC[i]=g; return g;}
+function grp(){const g=document.createElementNS(NS,"g"); SC[cur].appendChild(g); return g;}
+function P(j,phrase,shift=0){const s=T.scenes[cur].seg[j]; let f=0; if(phrase){const k=s.text.indexOf(phrase); f=k>=0?k/s.text.length:0;} return s.t+f*s.d-0.12+shift;}
+function doodle(t0,dur,build,extra={}){
+  const g=grp(); build(n=>g.appendChild(n));
+  const all=[...g.querySelectorAll("path")];
+  const paths=all.filter(p=>p.getAttribute("stroke")&&p.getAttribute("stroke")!=="none");
+  const fills=all.filter(p=>!paths.includes(p));
+  const lens=paths.map(p=>p.getTotalLength()); const total=lens.reduce((a,b)=>a+b,0)||1;
+  paths.forEach((p,i)=>{p.style.strokeDasharray=lens[i]+" "+lens[i]; p.style.strokeLinecap="round";});
+  EL.push(Object.assign({kind:"draw",t0,dur,g,paths,lens,total,fills},extra));
+}
+let clipN=0;
+function text(t0,x,y,str,size,color=INK,extra={}){
+  const g=grp(); const id="c"+(clipN++);
+  const cp=document.createElementNS(NS,"clipPath"); cp.id=id; const r=document.createElementNS(NS,"rect"); cp.appendChild(r); defs.appendChild(cp);
+  const tx=document.createElementNS(NS,"text"); tx.setAttribute("x",x); tx.setAttribute("y",y); tx.setAttribute("font-size",size); tx.setAttribute("fill",color);
+  if(extra.anchor) tx.setAttribute("text-anchor",extra.anchor);
+  tx.textContent=str; g.appendChild(tx); g.setAttribute("clip-path","url(#"+id+")");
+  const dur=extra.dur||Math.max(0.45,Math.min(1.4,str.length*0.035));
+  EL.push(Object.assign({kind:"text",t0,dur,g,tx,r},extra));
+}
+function title(str){ text(T.scenes[cur].start+0.25,120,140,str,84,INK); const L=Math.min(1200,str.length*34); doodle(T.scenes[cur].start+0.8,0.7,add=>add(rc.line(120,165,120+L,160,opt({stroke:BLUE,strokeWidth:5})))); }
+function render(t){
+  T.scenes.forEach((s,i)=>{const nx=i+1<T.scenes.length?T.scenes[i+1].start:T.total+1;
+    let o=0; if(t>=s.start&&t<nx){o=Math.min(1,(t-s.start)/0.3); if(t>nx-0.45) o=Math.max(0,(nx-t)/0.45);} SC[i].style.opacity=o; SC[i].style.display=o>0?"":"none";});
+  for(const e of EL){
+    const u=Math.max(0,Math.min(1,(t-e.t0)/e.dur));
+    let op=u>0?1:0; if(e.dimAt!=null&&t>e.dimAt) op=Math.max(.28,1-(t-e.dimAt)/0.6*0.72);
+    e.g.style.opacity=op;
+    if(e.kind==="draw"){let left=u*e.total; e.paths.forEach((p,i)=>{const L=e.lens[i]; const d=Math.max(0,Math.min(L,left)); left-=L; p.style.strokeDashoffset=(L-d);}); e.fills.forEach(f=>f.style.opacity=u>=1?1:0);}
+    else{ if(!e.bb){e.bb=e.tx.getBBox();} const b=e.bb; e.r.setAttribute("x",b.x-10); e.r.setAttribute("y",b.y-12); e.r.setAttribute("height",b.height+24); e.r.setAttribute("width",(b.width+20)*u);}
+  }
+}
+
+/* ---------- doodle library ---------- */
+const D={
+ robot:(add,x,y,s=1,c=INK)=>{const o=(e={})=>opt(Object.assign({stroke:c},e)); add(rc.rectangle(x,y,110*s,90*s,o())); add(rc.circle(x+35*s,y+40*s,18*s,o())); add(rc.circle(x+75*s,y+40*s,18*s,o()));
+   add(rc.line(x+35*s,y+68*s,x+75*s,y+68*s,o())); add(rc.line(x+55*s,y,x+55*s,y-28*s,o())); add(rc.circle(x+55*s,y-34*s,12*s,opt({stroke:RED})));
+   add(rc.rectangle(x+10*s,y+98*s,90*s,80*s,o())); add(rc.line(x+10*s,y+120*s,x-25*s,y+160*s,o())); add(rc.line(x+100*s,y+120*s,x+135*s,y+160*s,o()));},
+ bubble:(add,x,y,w,h,o={})=>{add(rc.ellipse(x+w/2,y+h/2,w,h,opt(o))); add(rc.line(x+w*0.25,y+h*0.85,x+w*0.12,y+h*1.25,opt(o)));},
+ doc:(add,x,y,w=150,h=190,o={})=>{add(rc.polygon([[x,y],[x+w-35,y],[x+w,y+35],[x+w,y+h],[x,y+h]],opt(o))); add(rc.line(x+w-35,y,x+w-35,y+35,opt(o))); add(rc.line(x+w-35,y+35,x+w,y+35,opt(o)));
+   const n=Math.max(2,Math.floor((h-70)/30)); for(let i=0;i<n;i++) add(rc.line(x+18,y+60+i*30,x+w-18-(i===n-1?w*0.3:0),y+60+i*30,opt(Object.assign({strokeWidth:2.4},o))));},
+ cross:(add,x,y,r=60)=>{add(rc.line(x-r,y-r,x+r,y+r,opt({stroke:RED,strokeWidth:6}))); add(rc.line(x+r,y-r,x-r,y+r,opt({stroke:RED,strokeWidth:6})));},
+ tick:(add,x,y,s=1,c=GREEN)=>{add(rc.linearPath([[x,y],[x+25*s,y+30*s],[x+75*s,y-35*s]],opt({stroke:c,strokeWidth:6})));},
+ arrow:(add,x1,y1,x2,y2,o={})=>{add(rc.line(x1,y1,x2,y2,opt(o))); const a=Math.atan2(y2-y1,x2-x1); for(const s of [-1,1]) add(rc.line(x2,y2,x2-22*Math.cos(a+s*0.5),y2-22*Math.sin(a+s*0.5),opt(Object.assign({},o,{strokeDasharray:undefined}))));},
+ curve:(add,pts,o={})=>{add(rc.curve(pts,opt(o))); const [x1,y1]=pts[pts.length-2],[x2,y2]=pts[pts.length-1]; const a=Math.atan2(y2-y1,x2-x1); for(const s of [-1,1]) add(rc.line(x2,y2,x2-24*Math.cos(a+s*0.5),y2-24*Math.sin(a+s*0.5),opt(o)));},
+ magnifier:(add,x,y,r=45,c=INK)=>{add(rc.circle(x,y,2*r,opt({stroke:c}))); add(rc.line(x+r*0.7,y+r*0.7,x+r*1.7,y+r*1.7,opt({stroke:c,strokeWidth:7})));},
+ person:(add,x,y,s=1,c=INK)=>{add(rc.circle(x,y,46*s,opt({stroke:c}))); add(rc.line(x,y+23*s,x,y+100*s,opt({stroke:c}))); add(rc.line(x,y+50*s,x-35*s,y+80*s,opt({stroke:c}))); add(rc.line(x,y+50*s,x+35*s,y+80*s,opt({stroke:c})));
+   add(rc.line(x,y+100*s,x-28*s,y+150*s,opt({stroke:c}))); add(rc.line(x,y+100*s,x+28*s,y+150*s,opt({stroke:c})));},
+ box:(add,x,y,w,h,o={})=>add(rc.rectangle(x,y,w,h,opt(o))),
+ folder:(add,x,y,w,h)=>{add(rc.polygon([[x,y+30],[x+w*0.3,y+30],[x+w*0.36,y],[x+w*0.62,y],[x+w*0.68,y+30],[x+w,y+30],[x+w,y+h],[x,y+h]],opt()));},
+ book:(add,x,y,w,h,c=NAVY)=>{add(rc.rectangle(x,y,w,h,opt({stroke:c}))); add(rc.line(x+18,y,x+18,y+h,opt({stroke:c}))); add(rc.line(x+35,y+h*0.35,x+w-15,y+h*0.35,opt({stroke:c,strokeWidth:2.4}))); add(rc.line(x+35,y+h*0.55,x+w-25,y+h*0.55,opt({stroke:c,strokeWidth:2.4})));},
+ cabinet:(add,x,y,w,dh,n)=>{for(let i=0;i<n;i++){add(rc.rectangle(x,y+i*dh,w,dh,opt())); add(rc.line(x+w/2-30,y+i*dh+dh*0.72,x+w/2+30,y+i*dh+dh*0.72,opt({strokeWidth:4})));}},
+ gate:(add,x,y,h)=>{add(rc.line(x,y,x,y+h,opt({strokeWidth:5}))); add(rc.line(x+160,y,x+160,y+h,opt({strokeWidth:5}))); add(rc.line(x-10,y+20,x+170,y+20,opt({stroke:GREEN,strokeWidth:6})));},
+ stop:(add,x,y,r=60)=>{const pts=[...Array(8)].map((_,i)=>{const a=Math.PI/8+i*Math.PI/4; return [x+r*Math.cos(a),y+r*Math.sin(a)];}); add(rc.polygon(pts,opt({stroke:RED,strokeWidth:4})));},
+ bars:(add,x,y)=>{add(rc.line(x,y,x,y-220,opt())); add(rc.line(x,y,x+300,y,opt())); [120,170,90,200,150].forEach((h,i)=>add(rc.rectangle(x+20+i*55,y-h,36,h,opt({stroke:BLUE,fill:"rgba(31,95,191,.18)",fillStyle:"hachure",hachureGap:9}))));},
+ briefcase:(add,x,y)=>{add(rc.rectangle(x,y,260,170,opt({strokeDasharray:"12 10"}))); add(rc.rectangle(x+90,y-40,80,40,opt({strokeDasharray:"12 10"}))); add(rc.line(x,y+70,x+260,y+70,opt({strokeDasharray:"12 10"})));},
+ padlock:(add,x,y)=>{add(rc.rectangle(x,y,120,100,opt({stroke:RED}))); add(rc.arc(x+60,y,80,110,Math.PI,2*Math.PI,false,opt({stroke:RED}))); add(rc.circle(x+60,y+45,18,opt({stroke:RED})));},
+ key:(add,x,y)=>{add(rc.circle(x,y,50,opt())); add(rc.line(x+25,y,x+130,y,opt())); add(rc.line(x+100,y,x+100,y+22,opt())); add(rc.line(x+120,y,x+120,y+18,opt()));},
+ clock:(add,x,y,r=70)=>{add(rc.circle(x,y,2*r,opt())); add(rc.line(x,y,x,y-r*0.65,opt({strokeWidth:4}))); add(rc.line(x,y,x+r*0.45,y+r*0.2,opt({strokeWidth:4})));},
+ scale:(add,x,y)=>{add(rc.line(x,y,x,y+200,opt())); add(rc.line(x-60,y+200,x+60,y+200,opt())); add(rc.line(x-150,y+20,x+150,y-10,opt())); add(rc.arc(x-150,y+60,110,80,0,Math.PI,false,opt())); add(rc.arc(x+150,y+30,110,80,0,Math.PI,false,opt()));},
+ sticky:(add,x,y,w,h)=>add(rc.rectangle(x,y,w,h,opt({stroke:ORANGE,fill:"rgba(240,190,80,.25)",fillStyle:"solid"}))),
+ node:(add,x,y,c=INK)=>add(rc.circle(x,y,60,opt({stroke:c}))),
+};
+/* ---------- scenes: one BUILD.push per scene, in script order ----------
+   P(j, "phrase") = when segment j of the current scene says that phrase. text(t0,x,y,str,size,color,{anchor,dimAt,dur})
+   writes on left to right; doodle(t0,dur,add=>{...}) draws rough.js shapes stroke by stroke; title(str) = heading + underline.
+   Replace the two example scenes with your own. Keep every fact on the board in the approved, sourced script. */
+const BUILD=[];
+BUILD.push(()=>{   // example scene 1
+  title("What's the problem?");
+  doodle(P(0,"forgets"),1.2,add=>{D.bubble(add,220,330,200,110); D.bubble(add,470,380,200,110);});
+  text(P(0,"forgets"),220,600,"1. It forgets.",64,INK);
+  doodle(P(1,"invents"),1.4,add=>{D.doc(add,1300,300,160,200); D.cross(add,1380,400,70);});
+  text(P(1,"invents"),1000,600,"2. It invents.",64,RED);
+});
+BUILD.push(()=>{   // example scene 2
+  title("A better system");
+  doodle(P(0),1.6,add=>{D.robot(add,860,330,1.2); D.folder(add,560,560,260,180); D.book(add,1180,580,150,170);});
+  text(P(0,"notes"),560,820,"plain-text notes",48,BLUE);
+  text(P(0,"rules"),1180,820,"written rules",48,NAVY);
+  text(P(1),960,960,"It makes AI output checkable.",62,BLUE,{anchor:"middle"});
+});
+function build(timing){T=timing; EL=[]; SC=[]; stage.innerHTML=""; defs.innerHTML=""; seed=11;
+  BUILD.forEach((f,i)=>{cur=i; sceneGroup(i); f();});}
+window.build=build; window.render=render;
+</script>
+</body></html>
