@@ -76,7 +76,7 @@ Do not save:
 
 The model starts every session with no memory. Anything that must still be true next session lives in a file that is read at the start: the project's `PROJECT-STATE.md`.
 
-**Shape of `PROJECT-STATE.md`** (template: `04-Templates/Sablon-Proje-Durumu.md`). Keep it short, with a target of about 150 lines or 15 KB. Sections, in this order:
+**Shape of `PROJECT-STATE.md`** (template: `04-Templates/template-project-state.md`). Keep it short, with a target of about 150 lines or 15 KB. Sections, in this order:
 
 1. Current state: status and phase, as of a date.
 2. Canonical artifacts: current files only.

@@ -45,7 +45,8 @@ vault-starter/
 ├── .claude/skills/           # citation-verification, course-hub-builder, explainer-video, presentation-builder, project-hub-builder,
 │                             # process-sources, research-ideation, ux-redesign, web-artifact-workflow, zotero-sources
 ├── .agents/skills/           # Codex copies of process-sources, zotero-sources
-├── 04-Templates/             # Sablon-*.md note templates (Turkish names) + two English templates
+├── 04-Templates/             # note templates: claim–evidence, decisions, project state, revision decision, source note,
+│                             # software-project kickoff, user interview
 │                             # (software project kickoff, user interview)
 └── 01-Library/ 02-Wiki/ 03-Projects/ 05-Inbox/ 06-Archive/   # empty folders
 ```
@@ -86,4 +87,4 @@ vault-starter/
 - `AGENTS.md` is the same manual as `CLAUDE.md` for Codex and other agents. If you edit one, mirror the change in the other.
 - The system files were re-synced on 2026-10-06 after the vault's restructure: a short `CLAUDE.md` with the detailed workflows in `VAULT-WORKFLOWS.md`, session handoff (each project keeps a short `PROJECT-STATE.md`; see `ENGINEERING-CONTRACT.md` §2) and `LESSONS-LEARNED.md`. Project names and personal examples were replaced with placeholders.
 - The worked examples in `Second-Brain-Guide` (a terrorism data analysis and a hypothetical investment review) are illustrations only. Their data and notes are not included.
-- The templates in `04-Templates/` have Turkish filenames (*Sablon* = template, *Kaynak Notu* = source note, *Karar* = decision, *İddia–Kanıt* = claim–evidence).
+- The templates in `04-Templates/` are in English (translated from the Turkish originals on 2026-10-14). Three of them (claim–evidence, source note, revision decision) come from a book-chapter project: they mention Chapter 4, NotebookLM and role codes (B/D/K/T); adapt those to your own project.

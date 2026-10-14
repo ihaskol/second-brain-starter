@@ -48,6 +48,6 @@ First, prepare the **file-structure proposal** and the **list of the first 5 tas
 
 ## Notes for use in this vault
 
-- In a vault project, record the approved scope and stack in the project's `DECISIONS.md` and the task list in `PROJECT-STATE.md` (see `Sablon-Karar.md` and `Sablon-Proje-Durumu.md`).
+- In a vault project, record the approved scope and stack in the project's `DECISIONS.md` and the task list in `PROJECT-STATE.md` (see `template-decisions.md` and `template-project-state.md`).
 - Secrets go in a git-ignored file or the system keychain, never in chat or in a command line (see `ENGINEERING-CONTRACT.md`).
 - Before filling in "Main problem it solves", consider running a few user interviews with `template-user-interview.md`.
