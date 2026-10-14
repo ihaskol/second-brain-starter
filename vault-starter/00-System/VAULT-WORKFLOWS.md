@@ -448,9 +448,31 @@ Before creating or updating a page, verify:
 - Is original source attribution retained?
 - Have all rules in `RESEARCH_PROTOCOL.md` been followed?
 
+## NEW PROJECT Workflow
+
+Triggered by "Create a new project in the Second Brain", `new project: …`, or a filled-in project form (Project name, Objective, Audience, Final deliverables, Available sources, Scope and limits, Success criteria, Deadline or review date, Language). The form alone is enough; the user does not need to repeat these steps.
+
+1. **Plan first, then wait.** Show the folders and files you plan to create, briefly. Write nothing until the user approves.
+2. **Create the project folder** in `03-Projects/`, with an English, descriptive folder name.
+3. **Write `PROJECT-STATE.md`** with: objective, current state, open items, last decision, "Tried and rejected — don't retry", and session log. Copy the form's fields (audience, deliverables, sources, scope, success criteria, deadline, language) into it.
+4. **Create `DECISIONS.md`** for genuine, consequential decisions only, each with its reason. Leave it empty rather than padding it.
+5. **Create `PROJECT-GRAPH.md` only if the work has several dependent steps.** Map real dependencies only (see `ENGINEERING-CONTRACT.md`).
+6. **Add the project to the Project Router** in `00-System/START-HERE.md`.
+7. **Find related notes through `index.md`.** Don't load the whole vault; retrieve in batches of at most five notes.
+8. **List what is missing** (blank or vague form fields, sources not found) and **every assumption** you had to make. A blank field is not a blocker: say what you assumed.
+9. **Follow `RESEARCH_PROTOCOL.md`:** no invented sources, citations or quotations; mark unverified claims.
+10. **At the end of every work session,** update `PROJECT-STATE.md` and add a session-log entry, including approaches tried and rejected (Session Handoff, `ENGINEERING-CONTRACT.md` §2).
+11. **Do not delete, merge, rename or restructure existing notes** without the user's permission.
+
+Then report: the files created, related notes found, missing information and assumptions, and the suggested first step. Pick the skill that fits the deliverables (`presentation-builder`, `course-hub-builder`, `explainer-video`, …) and name it in the plan.
+
 ## Short Command Interface
 
 Use the following short commands as aliases for the full workflows defined in this file and in `RESEARCH_PROTOCOL.md`.
+
+### `new project: [name]`
+
+When I say `new project: …` or paste the project form, follow the **NEW PROJECT Workflow** above in full. Ask only for what is missing and needed for step 1; list the rest as assumptions.
 
 ### `inspect raw`
 

@@ -4,7 +4,7 @@ Start Claude Code in your vault folder, copy a prompt, replace the [brackets] an
 
 ## 1. Start a new project
 
-*Once, when a project begins. Replace every [bracket].*
+*Once, when a project begins. Replace every [bracket]; leave a field blank if you don't know it yet. The form is enough: Claude follows the NEW PROJECT Workflow in 00-System/VAULT-WORKFLOWS.md (plan first and wait for your approval, project state and decision files, the project router, related notes through index.md, missing information and assumptions, no invented sources, a session-log entry every session).*
 
 ```text
 Create a new project in the Second Brain.
@@ -18,19 +18,6 @@ Scope and limits: [what is in and out: period, regions, source types]
 Success criteria: [how the result will be judged, e.g. "I will review the outputs"]
 Deadline or review date: [YYYY-MM-DD]
 Language: [e.g. English]
-
-Based on this information:
-1. Briefly show the folders and files you plan to create, then wait for my approval before writing anything.
-2. Create the project folder in 03-Projects/.
-3. Write PROJECT-STATE.md: objective, current state, open items, last decision, tried and rejected, session log.
-4. Create DECISIONS.md for genuine, consequential decisions only, each with its reason.
-5. If the work has several dependent steps, create PROJECT-GRAPH.md and map only real dependencies.
-6. Add the project to the project router in 00-System/START-HERE.md.
-7. Find relevant existing notes through index.md; do not load the whole vault.
-8. List any missing information and every assumption you had to make.
-9. Follow RESEARCH_PROTOCOL.md: no invented sources, citations or quotations; mark unverified claims.
-10. At the end of every work session, update PROJECT-STATE.md and add a session-log entry, including approaches tried and rejected.
-11. Do not delete, merge, rename or restructure existing notes without my permission.
 ```
 
 ## 2. Resume a project

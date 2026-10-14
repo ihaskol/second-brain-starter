@@ -106,6 +106,7 @@ All detailed workflows are in `00-System/VAULT-WORKFLOWS.md`. When a command or 
 | Command / task | Section in `00-System/VAULT-WORKFLOWS.md` |
 |---|---|
 | Source intake, OCR, quality gates (Stages 0–3) | Source Acquisition and Quality Control (+ `00-System/Source-Pipeline.md`) |
+| Creating a project: "Create a new project in the Second Brain" + the project form, or `new project: …` | NEW PROJECT Workflow |
 | `ingest this`, `inspect raw`, `approved, ingest` | INGEST Workflow; Short Command Interface |
 | A question about the vault, `query vault: …` | QUERY Workflow |
 | "save this answer" | SAVE Workflow |
