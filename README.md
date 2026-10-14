@@ -42,7 +42,7 @@ vault-starter/
 │   ├── Scripts/              # Source pipeline, Zotero, lint and output tools
 │   ├── Config/               # source-pipeline.yml, zotero-integration.yml
 │   └── Zotero/README.md
-├── .claude/skills/           # citation-verification, course-hub-builder, explainer-video, presentation-builder,
+├── .claude/skills/           # citation-verification, course-hub-builder, explainer-video, presentation-builder, project-hub-builder,
 │                             # process-sources, research-ideation, ux-redesign, web-artifact-workflow, zotero-sources
 ├── .agents/skills/           # Codex copies of process-sources, zotero-sources
 ├── 04-Templates/             # Sablon-*.md note templates (Turkish names) + two English templates
@@ -80,6 +80,7 @@ vault-starter/
 
 - `ux-redesign` is a UI/UX method for making an interactive page simple and user-friendly: a first-time-visitor audit, few views, essentials first, short version first with "Go deeper", plain language, clickable affordances. It includes tested code patterns and `scripts/link_check.js` (needs Node.js and `playwright-core`). Use it together with `web-artifact-workflow`.
 - `course-hub-builder` builds one interactive page for a whole course. Its template (`assets/course-hub-template.html`) is a neutral example, a fictional course ("EX 101 · Evidence and Public Policy"), built from a real course hub with every course-specific value replaced by a [bracketed] placeholder. Fill each placeholder from your own verified materials.
+- `project-hub-builder` builds one interactive page that explains a project, tool or method (Home · How it works · Build · Library, search, a sharp PDF viewer, a seekable video). Its template (`assets/project-hub-template.html`) has every value as a [bracketed] placeholder; `scripts/smoke_test.js` checks the result. For a course, use `course-hub-builder`.
 - `explainer-video` makes narrated, captioned explainer videos drawn in code: a 16:9 whiteboard, a 9:16 colored-pencil short, or an interactive in-page player. It needs Python with `kokoro-onnx` (local text-to-speech; download the model files from the kokoro-onnx releases), `ffmpeg`, Node.js with `playwright-core`, and a music track whose licence you have checked (CC0 recommended; none is bundled). Fonts and the drawing library are bundled with their licences.
 
 - `AGENTS.md` is the same manual as `CLAUDE.md` for Codex and other agents. If you edit one, mirror the change in the other.

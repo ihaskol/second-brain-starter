@@ -78,15 +78,7 @@ Single HTML file with a hash router. Tabs: **Start · Course map · Weeks · Wor
 - **PDF viewer:** lazy-load PDF.js 3.11.174 from cdnjs. Load `pdf.worker.min.js` as a `<script>` **before** `pdf.min.js`, so it runs as a main-thread fake worker; cross-origin workers are blocked. Then `getDocument("pdfs/<file>")`. Publish PDFs as supporting `files` under `pdfs/`.
 - **Charts:** load the `dataviz` skill first. Use thin horizontal bars with direct value labels, a legend when there are 2 or more series, a source line, and text in ink tokens. Run `validate_palette.js` for light **and** dark. The values that passed in the first build are light `#00806a,#a8720a,#2f62b0` and dark `#2fa88d,#b88a28,#5f8fd6`. Bars must be proportional: put the bar inside a wrapper track and the value label in its own grid column. Never subtract a fixed width from the bar.
 - **Links** to workshops and other artifacts open in a new tab; they stay private until the owner shares them. Say so on the page and in the report.
-- **Sharp slides in the PDF viewer:** render each page at `ss = max(2, devicePixelRatio × 1.5)` and cap the canvas at 6400 px wide. Size it in CSS as `canvas / ss`. Let the page grow to 1600 px. Add a **Full screen** button (Fullscreen API) and re-render when the mode changes. If you render at the device ratio, slides look softer than in PowerPoint.
-
-## Video, audio and captions on the artifact host (learned 2026-10-13)
-
-- **Seeking:** published media are served without byte-range support, so `<video src=…>` plays but can't seek. Instead, `fetch()` the file once and play it from `URL.createObjectURL(blob)`. Show a "Preparing the video (N MB)…" line until it loads. If the fetch fails, fall back to `src`. Python's `http.server` has the same limit, so it reproduces the bug locally. Keep files to a few MB, for example 540p or 720p H.264.
-- **Served types:** `.vtt` and `.m4a` are refused at publish. Audio goes as `.mp3`, `.ogg` or `.wav` and is fetched as a Blob too. For captions, embed the WebVTT text in the page and set `track.src = URL.createObjectURL(new Blob([vtt], {type: "text/vtt"}))`.
-- **Poster:** give every `<video>` a poster image that shows content. Otherwise the player looks empty before it plays.
-- **One block, two places:** when the same video appears on Home and in the Library, build it from one function (`videoHTML(id)`) and share one Blob URL, so it downloads once.
-- **Copies opened from disk (`file://`):** the PDF.js viewer can't load files there (the browser blocks the read), and video works only if `media/` travels with the page. Tell the owner to share the link, or a zip of the whole folder. A page meant to travel as a single file must embed its media as `data:` URIs; keep it to a few MB.
+- **Video, audio, captions, PDF viewer sharpness, copies opened from disk:** follow `web-artifact-workflow`, section "Media and files on the artifact host". It holds the general rules; nothing here differs for a course hub.
 
 ## Slide PDFs (Keynote export, safely)
 

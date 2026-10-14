@@ -46,7 +46,7 @@ It cannot make photoreal, 3D, claymation or detailed illustrated styles; those n
 8. **Encode:** `scripts/make_mp4.sh frames <fps> mix.m4a out.mp4 [cover.jpg]`. Use a cover when the video goes on a slide, because Keynote and PowerPoint show the first frame. Shift caption times by the cover length.
 9. **Deliver.**
    - Full-resolution MP4 plus `.vtt`.
-   - For a web page, a 540p or 720p copy. On the artifact host it must be fetched as a Blob to seek; the host refuses `.vtt` and `.m4a`. See `course-hub-builder`, "Video, audio and captions".
+   - For a web page, a 540p or 720p copy. On the artifact host it must be fetched as a Blob to seek; the host refuses `.vtt` and `.m4a`. See `web-artifact-workflow`, "Media and files on the artifact host".
    - For a deck, embed with python-pptx `add_movie(…, poster_frame_image=…, mime_type="video/mp4")` and put the timed script in the notes. Check that Keynote imports it.
 10. **Record** the build in the project's `PROJECT-STATE.md`: files, script version, voice, music source and QA.
 

@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>[Project name]</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Public+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Project hub template (project-hub-builder skill). One page, four views: Home · How it works · Build · Library.
+   Edit the CONTENT block in the script; the views, search, viewer and router read from it. */
+:root{--bg:#f7f6f2;--paper:#fff;--ink:#1d1d1b;--muted:#5e5c56;--line:#dcd9d0;--accent:#1f5fbf;--accent-soft:#e7eefb;--accent-text:#174a96;
+ --ok:#1e7a4f;--warn:#9a5b00;--warn-soft:#fbf0dd;--code:#f1efe8;--shadow:0 1px 2px rgba(0,0,0,.06),0 4px 14px rgba(0,0,0,.05);
+ --f-head:"Newsreader",Georgia,serif;--f-body:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;--f-mono:"IBM Plex Mono",Menlo,monospace;--hdr:72px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17181b;--paper:#212226;--ink:#ecebe6;--muted:#b0aea7;--line:#3a3b40;--accent:#7aa7f0;--accent-soft:#1f2a3d;--accent-text:#a9c6f7;--ok:#5cc495;--warn:#e0a54a;--warn-soft:#3a2f1c;--code:#2a2b30;--shadow:none}}
+:root[data-theme="dark"]{--bg:#17181b;--paper:#212226;--ink:#ecebe6;--muted:#b0aea7;--line:#3a3b40;--accent:#7aa7f0;--accent-soft:#1f2a3d;--accent-text:#a9c6f7;--ok:#5cc495;--warn:#e0a54a;--warn-soft:#3a2f1c;--code:#2a2b30;--shadow:none}
+*{box-sizing:border-box}
+html{scroll-padding-top:var(--hdr)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--f-body)}
+a{color:var(--accent-text)}
+h1,h2,h3{font-family:var(--f-head);line-height:1.2;margin:0 0 .4em}
+h1{font-size:clamp(1.9rem,4vw,2.8rem)} h2{font-size:1.6rem} h3,.h3{font-size:1.2rem}
+.wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+.muted{color:var(--muted)} .small{font-size:.9rem}
+.skip{position:absolute;left:-999px} .skip:focus{left:16px;top:8px;z-index:99;background:var(--paper);padding:8px 12px}
+/* header */
+header.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.hrow{display:flex;align-items:center;gap:12px;min-height:60px;flex-wrap:wrap}
+.brand{font-family:var(--f-head);font-weight:600;font-size:1.15rem;text-decoration:none;color:var(--ink);margin-right:auto}
+nav.tabs{display:flex;gap:4px;flex-wrap:wrap}
+nav.tabs a{text-decoration:none;color:var(--ink);padding:8px 12px;border-radius:8px;min-height:40px;display:inline-flex;align-items:center}
+nav.tabs a[aria-current="page"]{background:var(--accent-soft);color:var(--accent-text);font-weight:600}
+.iconbtn,.btn{font:inherit;cursor:pointer;border-radius:8px;min-height:40px;padding:6px 12px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.btn{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;text-decoration:none;display:inline-flex;align-items:center}
+:root[data-theme="dark"] .btn{color:#10131a} @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn{color:#10131a}}
+button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+#searchRow{padding:8px 0 12px} #searchRow input{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)}
+#searchResults{list-style:none;margin:6px 0 0;padding:0;border:1px solid var(--line);border-radius:8px;background:var(--paper);max-height:50vh;overflow:auto}
+#searchResults li a{display:block;padding:8px 12px;text-decoration:none;color:var(--ink)} #searchResults li a[aria-selected="true"],#searchResults li a:hover{background:var(--accent-soft)}
+#searchResults .k{font-size:.75rem;color:var(--muted);margin-right:8px;text-transform:uppercase;letter-spacing:.04em}
+/* views */
+main{padding:28px 0 48px} .view{animation:in .18s ease-out}
+@keyframes in{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}
+.sec{margin:40px 0} .lede{font-size:1.15rem;color:var(--muted);max-width:44rem}
+.grid{display:grid;gap:16px} .g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))} .g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr))}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow);min-width:0;transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.eyebrow{font:600 .75rem/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent-text)}
+.hero{padding:28px 0 8px} .hero .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.subnav{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 4px}
+.subnav a{font-size:.9rem;text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:6px 14px;color:var(--ink);background:var(--paper);min-height:34px;display:inline-flex;align-items:center}
+details.deeper{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:12px}
+details.deeper>summary{cursor:pointer;list-style:none;padding:14px 0;font-weight:700;display:flex;gap:10px;align-items:center;color:var(--accent-text)}
+details.deeper>summary::-webkit-details-marker{display:none}
+details.deeper>summary::before{content:"+";font-family:var(--f-mono);width:24px;height:24px;border:1px solid var(--line);border-radius:6px;display:grid;place-items:center}
+details.deeper[open]>summary::before{content:"−"} details.deeper>div{padding-bottom:16px}
+details.box{border:1px solid var(--line);border-radius:12px;background:var(--paper);margin:8px 0} details.box>summary{cursor:pointer;padding:12px 16px;font-weight:600} details.box>div{padding:0 16px 16px}
+.note{border-left:4px solid var(--accent);background:var(--accent-soft);padding:10px 14px;border-radius:0 8px 8px 0}
+.note.warn{border-color:var(--warn);background:var(--warn-soft)}
+pre.cmd{position:relative;background:var(--code);border:1px solid var(--line);border-radius:8px;padding:12px 76px 12px 12px;font:500 .88rem/1.5 var(--f-mono);white-space:pre-wrap;word-break:break-word;margin:8px 0}
+pre.cmd button{position:absolute;top:8px;right:8px;font:600 .8rem var(--f-body);min-height:32px;padding:4px 10px;border-radius:6px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.where{display:inline-block;font:600 .72rem var(--f-mono);text-transform:uppercase;border-radius:6px;padding:2px 8px;margin-right:8px;background:var(--accent-soft);color:var(--accent-text)}
+ol.steps{padding-left:0;list-style:none;counter-reset:s} ol.steps>li{counter-increment:s;display:grid;grid-template-columns:auto 1fr;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+ol.steps input{width:1.5rem;height:1.5rem;margin-top:2px}
+.more{display:inline-block;padding-block:4px}
+.check{color:var(--ok);font-weight:600}
+.progress{height:8px;background:var(--line);border-radius:99px;overflow:hidden} .progress>span{display:block;height:100%;background:var(--ok)}
+.tabsrow{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px} .tabsrow button[aria-selected="true"]{border-color:var(--accent);box-shadow:inset 0 -3px 0 var(--accent)}
+figure{margin:0} .figbtn{all:unset;cursor:zoom-in;display:block;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:var(--paper)}
+.figbtn img{display:block;width:100%;height:auto} figcaption{font-size:.88rem;color:var(--muted);margin-top:6px}
+video{width:100%;border-radius:14px;background:#000}
+table.t{border-collapse:collapse;width:100%;font-size:.95rem} table.t th,table.t td{border-bottom:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}
+.tablewrap{overflow-x:auto}
+.empty{border:1px dashed var(--line);border-radius:12px;padding:16px;color:var(--muted)}
+footer{border-top:1px solid var(--line);padding:24px 0 40px;color:var(--muted);font-size:.9rem}
+/* dialogs */
+dialog{border:0;padding:0;background:var(--paper);color:var(--ink);border-radius:14px;max-width:min(96vw,1700px);width:96vw}
+dialog::backdrop{background:rgba(0,0,0,.55)}
+.vbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 12px;border-bottom:1px solid var(--line)} .vbar .t{font-weight:600;margin-right:auto}
+#vStage{overflow:auto;max-height:80vh;display:flex;justify-content:center;align-items:flex-start;padding:12px;background:var(--bg)}
+#viewer:fullscreen #vStage{max-height:none;height:calc(100vh - 60px)}
+#lbStage img{display:block;max-width:100%;max-height:78vh;margin:0 auto}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+:root[data-motion="reduce"] *{animation:none!important;transition:none!important}
+</style></head><body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top"><div class="wrap">
+ <div class="hrow">
+  <a class="brand" href="#start" id="brand"></a>
+  <nav class="tabs" aria-label="Main"><a href="#start">Home</a><a href="#how">How it works</a><a href="#build">Build</a><a href="#library">Library</a></nav>
+  <button class="iconbtn" type="button" id="searchBtn" aria-expanded="false" aria-controls="searchRow">Search</button>
+  <label class="small"><span class="muted">Theme </span><select id="theme" class="iconbtn"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></label>
+ </div>
+ <div id="searchRow" hidden><input id="q" type="search" placeholder="Search this hub…" aria-label="Search this hub" autocomplete="off"><ul id="searchResults" role="listbox" hidden></ul></div>
+</div></header>
+<main id="main" class="wrap" tabindex="-1"></main>
+<footer><div class="wrap" id="foot"></div></footer>
+
+<dialog id="viewer" aria-label="Document viewer">
+ <div class="vbar"><span class="t" id="vTitle">Document</span>
+  <button class="iconbtn" type="button" id="vPrev">‹ Prev</button><span id="vPage" class="small"></span><button class="iconbtn" type="button" id="vNext">Next ›</button>
+  <button class="iconbtn" type="button" id="vZoomOut" aria-label="Zoom out">−</button><span id="vZoom" class="small">100%</span><button class="iconbtn" type="button" id="vZoomIn" aria-label="Zoom in">+</button>
+  <button class="iconbtn" type="button" id="vFull" hidden>Full screen</button><button class="iconbtn" type="button" id="vClose">Close</button></div>
+ <div id="vStage"></div>
+</dialog>
+<dialog id="lb" aria-label="Figure viewer">
+ <div class="vbar"><span class="t" id="lbTitle"></span><button class="iconbtn" type="button" id="lbPrev">‹</button><span id="lbN" class="small"></span><button class="iconbtn" type="button" id="lbNext">›</button><button class="iconbtn" type="button" id="lbClose">Close</button></div>
+ <div id="lbStage" style="padding:12px"></div>
+</dialog>
+
+<script>
+document.documentElement.lang="en";
+/* ============ CONTENT (edit here) ============
+   Every [bracketed] value is a placeholder: replace it from verified material, or delete the item.
+   Paths: figures in img/, PDFs in pdfs/, media in media/ (publish them as supporting files). */
+const SITE={title:"[Project name]",tagline:"[One sentence: what this is, for whom, and why it can be trusted]",
+ credit:"[© YEAR Author · licence, e.g. CC BY 4.0]",checked:"[YYYY-MM-DD: when the facts and steps were last checked]",
+ cite:"[How to cite this page, e.g. APA 7]"};
+const WHY=[["[Problem 1]","[What goes wrong without this]","[What this project does instead]"],
+           ["[Problem 2]","[…]","[…]"]];
+const WAYS=[
+ {t:"Get the idea",time:"[10 MINUTES]",s:"[What a first-time visitor learns here]",steps:[["Watch the video","#start-video"],["Read the limits","#how-limits"]],go:["Start","#start-video"]},
+ {t:"Understand how it works",time:"[30 MINUTES]",s:"[The parts and how they fit]",steps:[["[Chapter 1]","#how-c1"]],go:["Open How it works","#how"]},
+ {t:"Build your own",time:"[1–2 HOURS]",s:"[Set it up step by step, with a check after each step]",steps:[["Before you start","#build-before"]],go:["Open Build","#build"]}];
+const CHAPTERS=[ // id becomes #how-<id>
+ {id:"c1",t:"[Chapter title]",short:"[Answer first: two or three plain sentences]",deeper:"<p>[Details, tables, examples. HTML allowed.]</p>",figs:[]},
+ {id:"limits",t:"What it can't do",short:"[Honest limits: what is not measured, what still needs a person]",deeper:"",figs:[]}];
+const GLOSSARY=[["[Term]","[Plain definition]"]];
+const SAFETY=["[Security or safety rule 1, e.g. never paste a key into a chat]","[Rule 2]"];
+const WHERE={tm:"Terminal",cc:"Inside the AI tool",br:"Browser",app:"App"};
+const GUIDES=[ // steps: {w: WHERE key, x: instruction, cmd: optional command to copy, ok: how you know it worked}
+ {id:"g0",t:"[Guide 0: first thing to install]",essential:true,steps:[{w:"tm",x:"[Instruction]",cmd:"[command]",ok:"[What you see when it worked]"}]},
+ {id:"g1",t:"[Guide 1: optional add-on]",essential:false,steps:[{w:"br",x:"[Instruction]",ok:"[Check]"}]}];
+const PROMPTS=[{id:"p1",t:"[Prompt title]",when:"[When to use it]",body:`[Prompt text with [fields] to fill]`}];
+const VIDEO=null; // {title:"[…]",desc:"[…]",src:"media/[file]-540p.mp4",poster:"media/[poster].jpg",mb:7,vtt:`WEBVTT\n\n…`} — captions optional
+const DECKS=[];   // {t:"[Deck title]",aud:"[Audience]",f:"[file].pdf",n:12,d:"[One line]"}
+const DOCS=[];    // {t:"[Document title]",f:"[file].pdf",d:"[One line]"}
+const FIGS=[];    // ["[file].svg","[Caption that says what the figure shows]"]
+const NEW=[["[YYYY-MM-DD]","[What changed]","[One or two sentences]"]];
+
+/* ============ STATE (this browser only) ============ */
+const KEY="project-hub-v1"; let S={done:{},settings:{theme:"system"}};
+try{S=Object.assign(S,JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fig=f=>{const x=FIGS.find(y=>y[0]===f)||[f,""]; return `<figure><button type="button" class="figbtn" data-fig="${esc(f)}" aria-label="Enlarge: ${esc(x[1])}"><img src="img/${esc(f)}" alt="${esc(x[1])}" loading="lazy"></button><figcaption>${esc(x[1])}</figcaption></figure>`};
+const copyBox=t=>`<pre class="cmd"><button type="button" data-copy>Copy</button>${esc(t)}</pre>`;
+
+/* ============ VIEWS ============ */
+const V={};
+const videoHTML=id=>VIDEO?`<div class="sec" id="${id}"><h2>${esc(VIDEO.title)}</h2><p class="muted" style="max-width:44rem">${esc(VIDEO.desc)}</p>
+ <p class="small muted" data-vstatus>Preparing the video (${VIDEO.mb} MB)…</p>
+ <video controls preload="none" playsinline poster="${esc(VIDEO.poster)}" data-src="${esc(VIDEO.src)}" aria-label="${esc(VIDEO.title)}">${VIDEO.vtt?'<track kind="captions" srclang="en" label="English" default>':""}</video></div>`:"";
+V.start=()=>`<section class="view">
+ <div class="hero"><span class="eyebrow">Start here</span><h1>${esc(SITE.title)}</h1><p class="lede">${esc(SITE.tagline)}</p>
+  <div class="actions">${VIDEO?'<a class="btn" href="#start-video">Watch the video</a>':""}<a class="iconbtn" href="#how" style="text-decoration:none;display:inline-flex;align-items:center">How it works</a><a class="iconbtn" href="#build" style="text-decoration:none;display:inline-flex;align-items:center">Build your own</a></div></div>
+ <div class="sec" id="start-why"><h2>Why it exists</h2><div class="tablewrap">${tbl(["Without it","What goes wrong","What this does instead"],WHY.map(r=>r.map(esc)))}</div></div>
+ ${videoHTML("start-video")}
+ <div class="sec" id="start-ways"><h2>Start where you are</h2><div class="grid g3">${WAYS.map(w=>`<div class="card"><span class="eyebrow">${esc(w.time)}</span><h2 class="h3">${esc(w.t)}</h2><p>${esc(w.s)}</p><ol>${w.steps.map(s=>`<li><a href="${s[1]}">${esc(s[0])}</a></li>`).join("")}</ol><a class="btn" href="${w.go[1]}">${esc(w.go[0])}</a></div>`).join("")}</div></div>
+ <div class="sec" id="start-new"><h2>What's new</h2>${NEW.slice(0,3).map(n=>`<p><b>${esc(n[1])}</b> <span class="muted small">${esc(n[0])}</span><br>${esc(n[2])}</p>`).join("")}<a class="more" href="#library-new">All changes</a></div>
+</section>`;
+function tbl(head,rows){return `<table class="t"><thead><tr>${head.map(h=>`<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table>`}
+V.how=()=>`<section class="view"><span class="eyebrow">How it works</span><h1>How it works</h1>
+ <nav class="subnav" aria-label="Chapters">${CHAPTERS.map(c=>`<a href="#how-${c.id}">${esc(c.t)}</a>`).join("")}${GLOSSARY.length?'<a href="#how-glossary">Glossary</a>':""}</nav>
+ ${CHAPTERS.map((c,i)=>`<section class="sec" id="how-${c.id}"><span class="eyebrow">Chapter ${i+1}</span><h2>${esc(c.t)}</h2><p class="lede">${esc(c.short)}</p>
+   ${c.figs&&c.figs.length?`<div class="grid g2">${c.figs.map(fig).join("")}</div>`:""}
+   ${c.deeper?`<details class="deeper"><summary>Go deeper</summary><div>${c.deeper}</div></details>`:""}</section>`).join("")}
+ ${GLOSSARY.length?`<section class="sec" id="how-glossary"><h2>Glossary</h2><dl>${GLOSSARY.map(g=>`<dt><b>${esc(g[0])}</b></dt><dd>${esc(g[1])}</dd>`).join("")}</dl></section>`:""}
+</section>`;
+let promptSel=null;
+V.build=()=>{const total=GUIDES.reduce((a,g)=>a+g.steps.length,0), done=Object.keys(S.done).filter(k=>S.done[k]).length, q=PROMPTS.find(p=>p.id===promptSel)||PROMPTS[0];
+ return `<section class="view"><span class="eyebrow">Build</span><h1>Build your own</h1>
+ <p class="lede">Each step says where to type and ends with a check, so you know it worked.</p>
+ <div class="progress" role="progressbar" aria-label="Steps done" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${done}"><span style="width:${total?done/total*100:0}%"></span></div><p class="small muted">${done} of ${total} steps checked (saved in this browser only).</p>
+ <div class="sec" id="build-before"><h2>Before you start</h2>${SAFETY.map(s=>`<p class="note warn">${esc(s)}</p>`).join("")}</div>
+ <div class="sec" id="build-guides"><h2>Guides</h2>${GUIDES.map((g,gi)=>`<details class="box" id="build-${g.id}"${gi===0?" open":""}><summary>${esc(g.t)} ${g.essential?'<span class="where">essential</span>':'<span class="muted small">optional</span>'}</summary><div><ol class="steps">${g.steps.map((s,i)=>{const k=g.id+"-"+i; return `<li><input type="checkbox" data-step="${k}" ${S.done[k]?"checked":""} aria-label="Step ${i+1} done"><div><span class="where">${esc(WHERE[s.w]||s.w)}</span>${esc(s.x)}${s.cmd?copyBox(s.cmd):""}${s.ok?`<div class="small"><span class="check">Check: </span>${esc(s.ok)}</div>`:""}</div></li>`}).join("")}</ol></div></details>`).join("")}</div>
+ <div class="sec" id="build-work"><h2>Prompts</h2><div class="tabsrow" role="tablist" aria-label="Prompts">${PROMPTS.map(p=>`<button type="button" class="iconbtn" role="tab" data-prompt="${p.id}" aria-selected="${p.id===q.id}">${esc(p.t)}</button>`).join("")}</div>
+  <p class="small muted">${esc(q.when)}</p>${copyBox(q.body)}</div>
+ </section>`};
+V.library=()=>`<section class="view"><span class="eyebrow">Library</span><h1>Slides, documents, video and figures</h1>
+ <nav class="subnav" aria-label="Library sections">${VIDEO?'<a href="#library-video">Video</a>':""}<a href="#library-slides">Slides</a><a href="#library-docs">Documents</a><a href="#library-figures">Figures</a><a href="#library-new">What's new</a></nav>
+ ${videoHTML("library-video")}
+ <div class="sec" id="library-slides"><h2>Slides</h2>${DECKS.length?`<div class="grid g3">${DECKS.map(d=>`<div class="card"><span class="eyebrow">${esc(d.aud)}</span><h2 class="h3">${esc(d.t)}</h2><p class="small">${esc(d.d)}</p><button class="btn" type="button" data-pdf="${esc(d.f)}" data-title="${esc(d.t)}">View ${d.n?d.n+" slides":""}</button></div>`).join("")}</div>`:'<p class="empty">No slides yet.</p>'}</div>
+ <div class="sec" id="library-docs"><h2>Documents</h2>${DOCS.length?`<div class="grid g3">${DOCS.map(d=>`<div class="card"><h2 class="h3">${esc(d.t)}</h2><p class="small">${esc(d.d)}</p><button class="btn" type="button" data-pdf="${esc(d.f)}" data-title="${esc(d.t)}">Read</button></div>`).join("")}</div>`:'<p class="empty">No documents yet.</p>'}</div>
+ <div class="sec" id="library-figures"><h2>Figures</h2>${FIGS.length?`<div class="grid g3">${FIGS.map(f=>fig(f[0])).join("")}</div>`:'<p class="empty">No figures yet.</p>'}</div>
+ <div class="sec" id="library-new"><h2>What's new</h2>${NEW.map(n=>`<p><b>${esc(n[1])}</b> <span class="muted small">${esc(n[0])}</span><br>${esc(n[2])}</p>`).join("")}</div>
+</section>`;
+
+/* ============ SEARCH ============ */
+function index(){const ix=[];
+ CHAPTERS.forEach(c=>ix.push(["Chapter",c.t,c.short,"#how-"+c.id])); GLOSSARY.forEach(g=>ix.push(["Term",g[0],g[1],"#how-glossary"]));
+ GUIDES.forEach(g=>ix.push(["Guide",g.t,g.steps.map(s=>s.x).join(" "),"#build-"+g.id])); PROMPTS.forEach(p=>ix.push(["Prompt",p.t,p.when,"prompt:"+p.id]));
+ DECKS.forEach(d=>ix.push(["Slides",d.t,d.d,"pdf:"+d.f])); DOCS.forEach(d=>ix.push(["Document",d.t,d.d,"pdf:"+d.f])); FIGS.forEach(f=>ix.push(["Figure",f[1],"","fig:"+f[0]]));
+ return ix}
+let IX=null, sel=-1;
+function runSearch(q){const box=$("#searchResults"); q=q.trim().toLowerCase(); if(q.length<2){box.hidden=true; return}
+ IX=IX||index(); const hits=IX.filter(r=>(r[1]+" "+r[2]).toLowerCase().includes(q)).slice(0,12); sel=-1;
+ box.innerHTML=hits.length?hits.map((h,i)=>`<li><a href="${h[3].includes(":")?"#":h[3]}" data-go="${esc(h[3])}" role="option" aria-selected="false" id="sr${i}"><span class="k">${h[0]}</span>${esc(h[1])}</a></li>`).join(""):'<li><a href="#" aria-disabled="true">No matches</a></li>'; box.hidden=false;
+ box.querySelectorAll("[data-go]").forEach(a=>a.onclick=e=>{const g=a.dataset.go; if(g.includes(":")){e.preventDefault(); act(g)} closeSearch()})}
+function act(g){const [k,v]=[g.slice(0,g.indexOf(":")),g.slice(g.indexOf(":")+1)];
+ if(k==="pdf"){const d=[...DECKS,...DOCS].find(x=>x.f===v); openViewer(v,d?d.t:v)} else if(k==="fig") openFig(v); else if(k==="prompt"){promptSel=v; location.hash="#build-work"; render()}}
+function closeSearch(){$("#searchResults").hidden=true; $("#q").value=""; $("#searchRow").hidden=true; $("#searchBtn").setAttribute("aria-expanded","false")}
+$("#searchBtn").onclick=()=>{const r=$("#searchRow"); r.hidden=!r.hidden; $("#searchBtn").setAttribute("aria-expanded",String(!r.hidden)); if(!r.hidden) $("#q").focus()};
+$("#q").addEventListener("input",e=>runSearch(e.target.value));
+$("#q").addEventListener("keydown",e=>{const items=[...document.querySelectorAll("#searchResults [data-go]")]; if(e.key==="Escape") closeSearch();
+ if((e.key==="ArrowDown"||e.key==="ArrowUp")&&items.length){e.preventDefault(); sel=(sel+(e.key==="ArrowDown"?1:-1)+items.length)%items.length; items.forEach((a,i)=>a.setAttribute("aria-selected",String(i===sel)))}
+ if(e.key==="Enter"&&sel>=0) items[sel].click()});
+
+/* ============ ROUTER ============ */
+const ALIAS={}; // old anchors → new ones, so links in old emails keep working
+function resolve(){let h=(location.hash||"#start").slice(1); h=ALIAS[h]||h; const view=h.split("-")[0]; return {view:V[view]?view:"start",anchor:h}}
+let lastView=null;
+function render(){const {view,anchor}=resolve(); if(view!==lastView){$("#main").innerHTML=V[view](); lastView=view; IX=null}
+ else if(view==="build") $("#main").innerHTML=V.build();
+ document.querySelectorAll("nav.tabs a").forEach(a=>a.setAttribute("aria-current",a.getAttribute("href")==="#"+view?"page":"false"));
+ wire(); const t=anchor!==view&&document.getElementById(anchor); if(t) t.scrollIntoView(); else window.scrollTo(0,0)}
+window.addEventListener("hashchange",render);
+
+/* ============ WIRING ============ */
+let vidUrl=null, vidLoading=null, vttUrl=null;
+function wire(){
+ document.querySelectorAll("[data-copy]").forEach(b=>b.onclick=()=>{const t=b.parentElement.textContent.replace(/^Copy/,""); (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent="Copied"; setTimeout(()=>b.textContent="Copy",1500)}).catch(()=>{const r=document.createRange(); r.selectNodeContents(b.parentElement); const s=getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent="Press Ctrl/⌘+C"})});
+ document.querySelectorAll("[data-step]").forEach(c=>c.onchange=()=>{S.done[c.dataset.step]=c.checked; save(); const y=scrollY; render(); scrollTo(0,y)});
+ document.querySelectorAll("[data-prompt]").forEach(b=>b.onclick=()=>{promptSel=b.dataset.prompt; const y=scrollY; render(); scrollTo(0,y)});
+ document.querySelectorAll("[data-pdf]").forEach(b=>b.onclick=()=>openViewer(b.dataset.pdf,b.dataset.title));
+ document.querySelectorAll("[data-fig]").forEach(b=>b.onclick=()=>openFig(b.dataset.fig));
+ /* video: fetch once as a Blob so it can seek (the host has no byte ranges); captions from embedded VTT */
+ const vids=[...document.querySelectorAll("video[data-src]")]; if(vids.length){
+  const done=u=>{document.querySelectorAll("video[data-src]").forEach(v=>{if(v.src!==u) v.src=u}); document.querySelectorAll("[data-vstatus]").forEach(s=>s.hidden=true)};
+  if(vidUrl) done(vidUrl); else if(!vidLoading) vidLoading=fetch(VIDEO.src).then(r=>{if(!r.ok) throw 0; return r.blob()}).then(b=>{vidUrl=URL.createObjectURL(b); done(vidUrl)})
+   .catch(()=>{document.querySelectorAll("video[data-src]").forEach(v=>v.src=VIDEO.src); document.querySelectorAll("[data-vstatus]").forEach(s=>s.textContent="The video plays, but skipping ahead may not work in this browser.")});
+  if(VIDEO.vtt){vttUrl=vttUrl||URL.createObjectURL(new Blob([VIDEO.vtt],{type:"text/vtt"})); document.querySelectorAll("video track").forEach(t=>t.src=vttUrl)}}}
+
+/* ============ PDF VIEWER (PDF.js 3.11.174; sharp: supersampled canvas) ============ */
+let pdfLib=null, doc=null, page=1, zoom=1;
+const loadScript=src=>new Promise((ok,no)=>{const s=document.createElement("script"); s.src=src; s.onload=ok; s.onerror=no; document.head.appendChild(s)});
+async function ensurePdf(){if(pdfLib) return pdfLib; await loadScript("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"); await loadScript("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"); pdfLib=window.pdfjsLib; return pdfLib}
+async function renderPage(){const st=$("#vStage"); if(!doc) return; const pg=await doc.getPage(page); const fsm=!!document.fullscreenElement; const w=Math.min(st.clientWidth-24,fsm?4000:1600)*zoom; const v1=pg.getViewport({scale:1}); const dpr=window.devicePixelRatio||1; let ss=Math.max(2,dpr*1.5); if(w*ss>6400) ss=6400/w; const vp=pg.getViewport({scale:w/v1.width*ss});
+ const c=document.createElement("canvas"); c.width=vp.width; c.height=vp.height; c.style.width=(vp.width/ss)+"px"; c.style.height=(vp.height/ss)+"px"; c.setAttribute("aria-label","Page "+page+" of "+doc.numPages);
+ await pg.render({canvasContext:c.getContext("2d"),viewport:vp}).promise; st.innerHTML=""; st.appendChild(c); $("#vPage").textContent=page+" / "+doc.numPages; $("#vPrev").disabled=page<=1; $("#vNext").disabled=page>=doc.numPages}
+async function openViewer(f,t){const d=$("#viewer"); $("#vTitle").textContent=t; zoom=1; $("#vZoom").textContent="100%"; $("#vStage").innerHTML='<p class="muted" style="padding:24px">Loading…</p>'; d.showModal?d.showModal():d.setAttribute("open","");
+ try{const lib=await ensurePdf(); doc=await lib.getDocument("pdfs/"+f).promise; page=1; await renderPage()}catch(e){$("#vStage").innerHTML='<p class="muted" style="padding:24px">The viewer could not load this file. If you opened this page from your computer, open the shared link instead.</p>'}}
+$("#vPrev").onclick=()=>{if(page>1){page--; renderPage()}}; $("#vNext").onclick=()=>{if(doc&&page<doc.numPages){page++; renderPage()}};
+const setZoom=z=>{zoom=Math.min(3,Math.max(1,z)); $("#vZoom").textContent=Math.round(zoom*100)+"%"; renderPage()};
+$("#vZoomIn").onclick=()=>setZoom(zoom+0.5); $("#vZoomOut").onclick=()=>setZoom(zoom-0.5);
+$("#vClose").onclick=()=>$("#viewer").close(); $("#viewer").addEventListener("close",()=>{doc=null; if(document.fullscreenElement) document.exitFullscreen()});
+$("#viewer").addEventListener("keydown",e=>{if(e.key==="ArrowRight") $("#vNext").click(); if(e.key==="ArrowLeft") $("#vPrev").click()});
+if(document.fullscreenEnabled){const vf=$("#vFull"); vf.hidden=false; vf.onclick=()=>{if(document.fullscreenElement) document.exitFullscreen(); else $("#viewer").requestFullscreen().catch(()=>{vf.hidden=true})}; document.addEventListener("fullscreenchange",()=>{vf.textContent=document.fullscreenElement?"Exit full screen":"Full screen"; if(doc) renderPage()})}
+/* figure lightbox */
+let lbIdx=0;
+function showFig(){const f=FIGS[lbIdx]; $("#lbTitle").textContent=f[1]; $("#lbStage").innerHTML=`<img src="img/${esc(f[0])}" alt="${esc(f[1])}">`; $("#lbN").textContent=(lbIdx+1)+" / "+FIGS.length; $("#lbPrev").disabled=lbIdx<=0; $("#lbNext").disabled=lbIdx>=FIGS.length-1}
+function openFig(file){lbIdx=Math.max(0,FIGS.findIndex(x=>x[0]===file)); showFig(); const d=$("#lb"); if(!d.open) (d.showModal?d.showModal():d.setAttribute("open",""))}
+$("#lbPrev").onclick=()=>{if(lbIdx>0){lbIdx--; showFig()}}; $("#lbNext").onclick=()=>{if(lbIdx<FIGS.length-1){lbIdx++; showFig()}}; $("#lbClose").onclick=()=>$("#lb").close();
+["#lb","#viewer"].forEach(id=>$(id).addEventListener("click",e=>{if(e.target===e.currentTarget) e.currentTarget.close()}));
+
+/* ============ SETTINGS + START ============ */
+function applySettings(){const r=document.documentElement; if(S.settings.theme==="system") r.removeAttribute("data-theme"); else r.setAttribute("data-theme",S.settings.theme); $("#theme").value=S.settings.theme}
+$("#theme").onchange=e=>{S.settings.theme=e.target.value; save(); applySettings()};
+document.title=SITE.title; $("#brand").textContent=SITE.title;
+$("#foot").innerHTML=`<p>${esc(SITE.credit)} · Facts and steps last checked: ${esc(SITE.checked)}. Settings and checkmarks stay in this browser only.</p><details class="box"><summary>How to cite this</summary><div>${copyBox(SITE.cite)}</div></details>`;
+const setHdr=()=>document.documentElement.style.setProperty("--hdr",(document.querySelector("header.top").offsetHeight+12)+"px"); setHdr(); addEventListener("resize",setHdr);
+applySettings(); render();
+</script>
+</body></html>

@@ -14,7 +14,7 @@ A seven-step pass that every interactive page in this vault goes through before 
 Use it together with:
 - the built-in `artifact-design` guidance (page contract, theming, layout) and `dataviz` (any chart);
 - `ux-redesign` when the page needs simplifying or restructuring, not just polishing (first-time-visitor audit, information architecture, progressive disclosure, affordances); it runs inside steps 1–3 below;
-- the domain builder, if there is one: `course-hub-builder` (whole-course pages), `00-System/WORKSHOP-DESIGN-STANDARD.md` (in-class workshops), `presentation-builder` (decks; not web pages).
+- the domain builder, if there is one: `course-hub-builder` (whole-course pages), `project-hub-builder` (a hub that explains a project, tool or method), `00-System/WORKSHOP-DESIGN-STANDARD.md` (in-class workshops), `presentation-builder` (decks; not web pages).
 
 `RESEARCH_PROTOCOL.md` still governs every fact on the page.
 
@@ -32,11 +32,27 @@ Use it together with:
 
 ## Media and files on the artifact host (learned 2026-10-13)
 
-- Published media have **no byte-range support**. Fetch video and audio once as a Blob and play it from an object URL, or seeking won't work.
-- **Not served:** `.vtt` and `.m4a`. Embed captions as a Blob `<track>`, and use `.mp3`, `.ogg` or `.wav` for audio. The publish error lists the served types.
-- Give every video a **poster** that shows content.
-- A page copied alone to another computer loses its `media/` and `pdfs/` folders. Share the link, or embed small media as `data:` URIs when the page must travel as one file.
-- Details and code patterns: the `course-hub-builder` skill, section "Video, audio and captions".
+These apply to every page: course hubs, project hubs, explainers.
+
+- **Video and audio seeking.** Published media are served without byte-range support. `<video src=…>` plays but can't seek. Instead, `fetch()` the file once and play it from `URL.createObjectURL(blob)`:
+  - show a "Preparing the video (N MB)…" line until it loads;
+  - fall back to `src` if the fetch fails;
+  - keep files to a few MB (540p or 720p H.264).
+
+  Python's `http.server` has the same limit, so it reproduces the bug locally.
+- **Served types.** `.vtt` and `.m4a` are refused at publish; the error lists what is served. Audio goes as `.mp3`, `.ogg` or `.wav` and is fetched as a Blob too. For captions, embed the WebVTT text in the page and set `track.src = URL.createObjectURL(new Blob([vtt], {type: "text/vtt"}))`.
+- **Poster.** Every `<video>` gets a poster that shows content (a frame from the video). Otherwise the player looks empty.
+- **One media block, several places.** When the same video appears on two views, render it from one function and reuse one Blob URL, so it downloads once.
+- **PDF viewer (PDF.js 3.11.174 from cdnjs).**
+  - Load `pdf.worker.min.js` as a `<script>` *before* `pdf.min.js`; cross-origin workers are blocked.
+  - Render each page at `ss = max(2, devicePixelRatio × 1.5)`, cap the canvas at 6400 px wide and size it in CSS as `canvas / ss`. Let the page grow to 1600 px.
+  - Add a **Full screen** button (Fullscreen API) and re-render on `fullscreenchange`.
+  - Rendering at the device ratio alone looks softer than PowerPoint.
+  - Publish PDFs as supporting `files` under `pdfs/`. Don't link to them with `href`: links to a page's own files are blocked in the artifact frame.
+- **Copies opened from disk (`file://`).** PDF.js can't read local files there, and video works only if `media/` travels with the page.
+  - Tell owners to share the link, or a zip of the whole folder.
+  - A page meant to travel as a single file embeds its media as `data:` URIs (keep it to a few MB).
+- **Re-publishing a supporting file you didn't publish in this session** is refused until you read it (`action: "read"` with its `path`). Read it, confirm that it is the old version, then publish.
 
 ## Step 6 in detail: the audit
 

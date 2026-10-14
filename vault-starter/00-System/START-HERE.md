@@ -122,6 +122,7 @@ Deliverable standards for every project (English only, Times New Roman, visuals 
 - A page that feels confusing, cluttered or unfriendly (simplify, redesign, first-time-visitor review, UI/UX): use the **`ux-redesign`** skill (`.claude/skills/ux-redesign/`), then finish with `web-artifact-workflow`
 - Any interactive page or artifact (audit, polish, launch): follow the **`web-artifact-workflow`** skill (`.claude/skills/web-artifact-workflow/`), including its accessibility audit script
 - Whole-course interactive student page (course map, week pages with slides, workshops, exam prep): use the **`course-hub-builder`** skill (`.claude/skills/course-hub-builder/`)
+- A hub that explains a project, tool or method to outside readers (Home · How it works · Build · Library, search, PDF viewer, video): use the **`project-hub-builder`** skill (`.claude/skills/project-hub-builder/`)
 - Narrated explainer video or animation (16:9 whiteboard, 9:16 colored-pencil short, interactive in-page player; local TTS, music under the voice, captions, MP4): use the **`explainer-video`** skill (`.claude/skills/explainer-video/`)
 - In-class group workshops: follow `00-System/WORKSHOP-DESIGN-STANDARD.md` (interactive HTML + Word + Excel from one config; team codes; class comparison; `#instructor` keys)
 
