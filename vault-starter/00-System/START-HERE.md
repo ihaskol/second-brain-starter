@@ -124,6 +124,8 @@ Deliverable standards for every project (English only, Times New Roman, visuals 
 - Whole-course interactive student page (course map, week pages with slides, workshops, exam prep): use the **`course-hub-builder`** skill (`.claude/skills/course-hub-builder/`)
 - A hub that explains a project, tool or method to outside readers (Home · How it works · Build · Library, search, PDF viewer, video): use the **`project-hub-builder`** skill (`.claude/skills/project-hub-builder/`)
 - Narrated explainer video or animation (16:9 whiteboard, 9:16 colored-pencil short, interactive in-page player; local TTS, music under the voice, captions, MP4): use the **`explainer-video`** skill (`.claude/skills/explainer-video/`)
+- A course chatbot that answers only from approved course materials, with citations and guardrails: use the **`course-companion`** skill (`.claude/skills/course-companion/`) and `00-System/COURSE-COMPANION-STANDARD.md`; build its knowledge file with `00-System/Scripts/build_companion_kp.py`
+- Design, test and pitch a small AI agent fast (hackathon, workshop, pilot proposal): use the **`ai-agent-sprint`** skill (`.claude/skills/ai-agent-sprint/`)
 - In-class group workshops: follow `00-System/WORKSHOP-DESIGN-STANDARD.md` (interactive HTML + Word + Excel from one config; team codes; class comparison; `#instructor` keys)
 
 ---

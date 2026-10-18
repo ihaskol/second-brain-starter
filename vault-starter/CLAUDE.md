@@ -116,7 +116,7 @@ All detailed workflows are in `00-System/VAULT-WORKFLOWS.md`. When a command or 
 | Creating or editing any `02-Wiki/` page | YAML Frontmatter; Standard Page Structure; Linking Rules; Final Check Before Writing |
 | Updating `index.md` / `log.md` | Index Rules; Log Rules |
 
-Skills for specialised work are listed in `00-System/START-HERE.md` (Shared Build Tools): `presentation-builder`, `course-hub-builder`, `project-hub-builder`, `web-artifact-workflow`, `explainer-video`, `ux-redesign`, `research-ideation`, `citation-verification`, `zotero-sources`, `process-sources`.
+Skills for specialised work are listed in `00-System/START-HERE.md` (Shared Build Tools): `presentation-builder`, `course-hub-builder`, `project-hub-builder`, `web-artifact-workflow`, `explainer-video`, `ux-redesign`, `research-ideation`, `citation-verification`, `zotero-sources`, `process-sources`, `course-companion`, `ai-agent-sprint`.
 
 ---
 
