@@ -1,5 +1,5 @@
 # Python packages for the vault's scripts.
-# Install into the vault's own environment (see Integration-Setup-Guides, Guide 3):
+# Install into the vault's own environment (see Integration-Setup-Guides, Guide 4):
 #   python3 -m venv .venv
 #   source .venv/bin/activate
 #   python -m pip install -r 00-System/requirements.txt
